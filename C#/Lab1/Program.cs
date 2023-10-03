@@ -1,6 +1,16 @@
 ﻿using Lab1;
 using Lab1.Generators;
 
-ExponentialGenerator generator = new();
-DistributionAnalyser analyser = new(generator);
-analyser.Run();
+GeneratorAnalyser analyser = new();
+
+Console.Out.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+Console.Out.WriteLine("EXPONENTIAL");
+analyser.RunFullAnalysis(new ExponentialGenerator());
+
+Console.Out.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+Console.Out.WriteLine("NORMAL");
+analyser.RunFullAnalysis(new NormalGenerator());
+
+Console.Out.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+Console.Out.WriteLine("UNIFORM");
+analyser.RunFullAnalysis(new UniformGenerator());
