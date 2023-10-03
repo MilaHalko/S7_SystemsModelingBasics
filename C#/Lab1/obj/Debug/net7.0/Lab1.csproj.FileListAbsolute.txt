@@ -13,3 +13,11 @@ C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\obj\Debug\net7.0\refint\L
 C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\obj\Debug\net7.0\Lab1.pdb
 C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\obj\Debug\net7.0\Lab1.genruntimeconfig.cache
 C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\obj\Debug\net7.0\ref\Lab1.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\MathNet.Numerics.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\obj\Debug\net7.0\Lab1.csproj.CopyComplete
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\ScottPlot.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\System.Drawing.Common.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\C#\Lab1\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
