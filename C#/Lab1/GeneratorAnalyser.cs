@@ -8,29 +8,28 @@ namespace Lab1;
 public class GeneratorAnalyser
 {
     private List<double> _numbers = new();
-    private List<Interval> intervals = new();
-    private List<Interval> unitedIntervals = new();
-    
+    private List<Interval> _intervals = new();
+    private List<Interval> _unitedIntervals = new();
+
     public int NumbersCount { get; set; } = 1000;
     public int IntervalsCount { get; set; } = 20;
 
     public void RunFullAnalysis(Generator generator)
     {
         _numbers = generator.Generate(NumbersCount);
-        intervals = Interval.SplitNumbersIntoEqualIntervals(_numbers, IntervalsCount);
-        PrintIntervalsInOneLine(intervals);
+        _intervals = Interval.SplitNumbersIntoEqualIntervals(_numbers, IntervalsCount);
+        PrintIntervalsAsColumn(_intervals);
 
-        unitedIntervals = Interval.UniteSmallIntervals(intervals);
+        _unitedIntervals = Interval.UniteSmallIntervals(_intervals);
         // Console.Out.WriteLine("United version:");
         // PrintIntervals(unitedIntervals);
 
         PrintAllIntervalsCount();
-        var chiSquared = ChiFullChecking(unitedIntervals, generator.GetIntegralFunc());
+        GetChiAndCheckWithPrint(_unitedIntervals, generator.GetIntegralFunc());
     }
 
-    private double ChiFullChecking(List<Interval> unitedIntervals, Func<double, double, double> integralFunc)
+    private double GetChiAndCheckWithPrint(List<Interval> unitedIntervals, Func<double, double, double> integralFunc)
     {
-        Generator generator;
         double chiSquared = CalculateChiSquared(unitedIntervals, integralFunc);
         int v = unitedIntervals.Count - 2;
         bool chiIsOk = CheckChiSquared(chiSquared, v);
@@ -39,12 +38,13 @@ public class GeneratorAnalyser
         return chiSquared;
     }
 
-    public double CalculateChiSquared(List<Interval> intervals, Func<double, double, double> integralFunc)
+    private double CalculateChiSquared(List<Interval> intervals, Func<double, double, double> integralFunc)
     {
         double chi = 0;
         foreach (var interval in intervals)
         {
-            double npi = GetNumbersCountInAllIntervals(intervals) * integralFunc(interval.StartPoint, interval.EndPoint);
+            double npi = GetNumbersCountInAllIntervals(intervals) *
+                         integralFunc(interval.StartPoint, interval.EndPoint);
             chi += Math.Pow((interval.Count - npi), 2) / npi;
         }
 
@@ -62,10 +62,9 @@ public class GeneratorAnalyser
         return count;
     }
 
-    public void PrintIntervalsInOneLine(List<Interval> intervals)
+    private void PrintIntervalsAsColumn(List<Interval> intervals)
     {
-        CultureInfo customCulture = new CultureInfo("fr-FR");
-        customCulture.NumberFormat.NumberDecimalSeparator = ",";
+        CultureInfo customCulture = new CultureInfo("fr-FR") { NumberFormat = { NumberDecimalSeparator = "," } };
 
         foreach (var interval in intervals)
         {
@@ -101,7 +100,7 @@ public class GeneratorAnalyser
 
     private void PrintAllIntervalsCount()
     {
-        Console.Out.WriteLine($"Initial count: {intervals.Count} \n" +
-                              $"United  count: {unitedIntervals.Count}");
+        Console.Out.WriteLine($"Initial count: {_intervals.Count} \n" +
+                              $"United  count: {_unitedIntervals.Count}");
     }
 }

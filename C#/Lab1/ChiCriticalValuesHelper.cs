@@ -2,7 +2,7 @@
 
 public static class ChiCriticalValuesHelper
 {
-    private static Dictionary<int, double> dataDictionary = new Dictionary<int, double>
+    private static readonly Dictionary<int, double> DataDictionary = new Dictionary<int, double>
     {
         { 1, 3.841 },
         { 2, 5.991 },
@@ -29,14 +29,14 @@ public static class ChiCriticalValuesHelper
     public static bool CheckChiSquared(double chi, int v) {
         try
         {
-            return chi < dataDictionary[v];
+            return chi < DataDictionary[v];
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Console.WriteLine("V is out of range for checking Chi-squared");
             throw;
         }
     }
     
-    public static double GetChiCriticalValue(int v) => dataDictionary[v];
+    public static double GetChiCriticalValue(int v) => DataDictionary[v];
 }

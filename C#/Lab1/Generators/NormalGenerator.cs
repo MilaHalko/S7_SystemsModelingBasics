@@ -17,8 +17,8 @@ public class NormalGenerator : Generator
 
     protected override double GenerateNumber()
     {
-        double U = Enumerable.Range(0, 12).Select(_ => _random.NextDouble()).Sum() - 6;
-        return Sigma * U + Alpha;
+        double u = Enumerable.Range(0, 12).Select(_ => _random.NextDouble()).Sum() - 6;
+        return Sigma * u + Alpha;
     }
 
     public override Func<double, double, double> GetIntegralFunc() => (start, end) =>
