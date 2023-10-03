@@ -4,11 +4,9 @@ public class Interval
 {
     public double StartPoint { get; private set; }
     public double EndPoint { get; private set; }
-
-    public int Count { get; set; }
+    public int Count { get; private set; }
     private const int IntervalMinCapacity = 5;
-
-
+    
     public Interval(double startPoint, double endPoint)
     {
         StartPoint = startPoint;
