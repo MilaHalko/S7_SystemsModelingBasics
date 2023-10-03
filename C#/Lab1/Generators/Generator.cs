@@ -2,7 +2,6 @@
 
 public abstract class Generator
 {
-    
     protected abstract double GenerateNumber();
 
     public List<double> Generate(int size)
@@ -10,8 +9,9 @@ public abstract class Generator
         List<double> numbers = new();
         for (int i = 0; i < size; i++)
         {
-            numbers.Add( GenerateNumber());
+            numbers.Add(GenerateNumber());
         }
+
         return numbers;
     }
 

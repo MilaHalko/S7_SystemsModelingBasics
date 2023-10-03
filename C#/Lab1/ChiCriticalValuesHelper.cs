@@ -26,7 +26,8 @@ public static class ChiCriticalValuesHelper
         { 20, 31.410 }
     };
 
-    public static bool CheckChiSquared(double chi, int v) {
+    public static bool CheckChiSquared(double chi, int v)
+    {
         try
         {
             return chi < DataDictionary[v];
@@ -37,6 +38,6 @@ public static class ChiCriticalValuesHelper
             throw;
         }
     }
-    
+
     public static double GetChiCriticalValue(int v) => DataDictionary[v];
 }

@@ -6,9 +6,9 @@ namespace Lab1.Generators;
 public class NormalGenerator : Generator
 {
     private readonly Random _random = new Random();
-    public double Sigma { get; set; }     // dispersion
-    public double Alpha { get; set; }     // mathematical expectation
-    
+    public double Sigma { get; set; } // dispersion
+    public double Alpha { get; set; } // mathematical expectation
+
     public NormalGenerator(double sigma = 1, double alpha = 0)
     {
         Sigma = sigma;
@@ -26,5 +26,4 @@ public class NormalGenerator : Generator
         double Func(double x) => 1 / (Sigma * Sqrt(2 * PI)) * Exp(-(Pow(x - Alpha, 2) / (2 * Pow(Sigma, 2))));
         return Integrate.OnClosedInterval(Func, start, end);
     };
-
 }
