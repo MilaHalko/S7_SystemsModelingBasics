@@ -1,22 +1,18 @@
 ﻿namespace Lab1.Generators;
 
-public class ExponentialGenerator : IGenerator
+public class ExponentialGenerator : Generator
 {
-    private readonly double _lambda;
+    public double Lambda { get; set; }
+
     private readonly Random _random = new Random();
 
     public ExponentialGenerator(double lambda = 1)
     {
-        _lambda = lambda;
+        Lambda = lambda;
     }
 
-    public double[] Generate(int size)
-    {
-        double[] numbers = new Double[size];
-        for (int i = 0; i < size; i++)
-        {
-            numbers[i] = (-1 / _lambda) * Math.Log(_random.NextDouble());
-        }
-        return numbers;
-    }
+    protected override double GenerateNumber() => (-1 / Lambda) * Math.Log(_random.NextDouble());
+
+    public override Func<double, double, double> GetIntegralFunc() =>
+        (start, end) => (1 - Math.Exp(-Lambda * end)) - (1 - Math.Exp(-Lambda * start));
 }

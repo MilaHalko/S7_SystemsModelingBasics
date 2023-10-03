@@ -1,30 +1,30 @@
-﻿namespace Lab1.Generators;
+﻿using MathNet.Numerics;
+using static System.Math;
 
-public class NormalGenerator : IGenerator
+namespace Lab1.Generators;
+
+public class NormalGenerator : Generator
 {
     private readonly Random _random = new Random();
-    private readonly double _sigma;
-    private readonly double _a;
+    public double Sigma { get; set; }     // dispersion
+    public double Alpha { get; set; }     // mathematical expectation
     
-    public NormalGenerator(double sigma = 1, double a = 0)
+    public NormalGenerator(double sigma = 1, double alpha = 0)
     {
-        _sigma = sigma;
-        _a = a;
+        Sigma = sigma;
+        Alpha = alpha;
     }
 
-    private double GenerateNumber()
+    protected override double GenerateNumber()
     {
         double U = Enumerable.Range(0, 12).Select(_ => _random.NextDouble()).Sum() - 6;
-        return _sigma * U + _a;
+        return Sigma * U + Alpha;
     }
 
-    public double[] Generate(int size)
+    public override Func<double, double, double> GetIntegralFunc() => (start, end) =>
     {
-        double[] numbers = new Double[size];
-        for (int i = 0; i < size; i++)
-        {
-            numbers[i] = GenerateNumber();
-        }
-        return numbers;
-    }
+        double Func(double x) => 1 / (Sigma * Sqrt(2 * PI)) * Exp(-(Pow(x - Alpha, 2) / (2 * Pow(Sigma, 2))));
+        return Integrate.OnClosedInterval(Func, start, end);
+    };
+
 }

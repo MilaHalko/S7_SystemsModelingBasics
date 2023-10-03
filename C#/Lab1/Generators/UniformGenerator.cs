@@ -1,32 +1,23 @@
 ﻿namespace Lab1.Generators;
 
-public class UniformGenerator : IGenerator
+public class UniformGenerator : Generator
 {
-    private readonly uint _a; // 5^13 == 1220703125
-    private readonly uint _c; // 2^31 == 2147483648
-    private uint _z;
+    public long A { get; set; } // 5^13 == 1220703125
+    public long C { get; set; } // 2^31 == 2147483648
+    public long Z { get; set; }
 
-    public UniformGenerator(uint a = 1220703125, uint c = 2147483648)
+    public UniformGenerator(long a = 1220703125, long c = 2147483648)
     {
-        _a = a;
-        _c = c;
-        _z = (uint)new Random().Next();
+        A = a;
+        C = c;
+        Z = new Random().Next();
     }
 
-    private double GenerateNumber()
+    protected override double GenerateNumber()
     {
-        _z = _a * _z % _c;
-        return _z / _c;
+        Z = A * Z % C;
+        return (double)Z / C;
     }
 
-    public double[] Generate(int size)
-    {
-        double[] numbers = new Double[size];
-        for (int i = 0; i < size; i++)
-        {
-            numbers[i] = GenerateNumber();
-        }
-
-        return numbers;
-    }
+    public override Func<double, double, double> GetIntegralFunc() => (start, end) => end - start;
 }
