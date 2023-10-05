@@ -10,32 +10,49 @@ public class GeneratorAnalyser
     private List<double> _numbers = new();
     private List<Interval> _intervals = new();
     private List<Interval> _unitedIntervals = new();
+    private double chi;
+    private double tableChi;
 
     public int NumbersCount { get; set; } = 1000;
     public int IntervalsCount { get; set; } = 20;
 
-    public void RunFullAnalysis(Generator generator)
+    public bool GetChiIsOkAfterAnalysis(Generator generator)
     {
         _numbers = generator.Generate(NumbersCount);
         _intervals = Interval.SplitNumbersIntoEqualIntervals(_numbers, IntervalsCount);
-        PrintIntervalsAsColumn(_intervals);
-
         _unitedIntervals = Interval.UniteSmallIntervals(_intervals);
-        // Console.Out.WriteLine("United version:");
-        // PrintIntervals(unitedIntervals);
-
-        PrintAllIntervalsCount();
-        GetChiAndCheckWithPrint(_unitedIntervals, generator.GetIntegralFunc());
+        chi = CalculateChiSquared(_unitedIntervals, generator.GetIntegralFunc());
+        tableChi = GetChiCriticalValue(_unitedIntervals.Count - 2);
+        return chi < tableChi;
     }
 
-    private double GetChiAndCheckWithPrint(List<Interval> unitedIntervals, Func<double, double, double> integralFunc)
+    public double GetChiAfterAnalysisWithPrint(Generator generator)
     {
-        double chiSquared = CalculateChiSquared(unitedIntervals, integralFunc);
-        int v = unitedIntervals.Count - 2;
-        bool chiIsOk = CheckChiSquared(chiSquared, v);
-        Console.Out.WriteLine($"Chi-squared is {(chiIsOk ? "OK" : "NOT OK")}");
-        Console.Out.WriteLine($"{chiSquared:F3} {(chiIsOk ? "<" : ">= ")} {GetChiCriticalValue(v)}\n");
-        return chiSquared;
+        bool chiIsOk = GetChiIsOkAfterAnalysis(generator);
+        PrintIntervalsAsColumn(_intervals);
+        Console.Out.WriteLine($"Intervals count: {_intervals.Count} -> {_unitedIntervals.Count}");
+        Console.Out.WriteLine($"Average: {GetAverage()}");
+        Console.Out.WriteLine($"Dispersion: {GetDispersion()}");
+        Console.Out.WriteLine($"Chi: {chi:F3} {(chiIsOk ? "<" : ">= ")} {tableChi} {(chiIsOk ? "OK" : "NOT OK")}");
+        return chi;
+    }
+    
+    public void TestChiIsOkPercent(Generator generator, int TESTS_COUNT = 1000)
+    {
+        int chiIsOk = Enumerable.Range(0, TESTS_COUNT).Select(_ => GetChiIsOkAfterAnalysis(generator) ? 1 : 0).Sum();
+        double goodChiPercent = (double)chiIsOk / TESTS_COUNT * 100;
+        Console.Out.WriteLine($"Percent of good chi: {goodChiPercent:F2}%");
+    }
+
+    private double GetAverage() => _numbers.Average();
+
+    private double GetDispersion()
+    {
+        double average = GetAverage();
+        double dispersion = 0;
+        foreach (var number in _numbers) dispersion += Math.Pow(number - average, 2);
+
+        return dispersion / (_numbers.Count - 1);
     }
 
     private double CalculateChiSquared(List<Interval> intervals, Func<double, double, double> integralFunc)
@@ -51,16 +68,8 @@ public class GeneratorAnalyser
         return chi;
     }
 
-    private int GetNumbersCountInAllIntervals(List<Interval> intervals)
-    {
-        int count = 0;
-        foreach (var interval in intervals)
-        {
-            count += interval.Count;
-        }
-
-        return count;
-    }
+    private int GetNumbersCountInAllIntervals(List<Interval> intervals) =>
+        Enumerable.Sum(intervals, interval => interval.Count);
 
     private void PrintIntervalsAsColumn(List<Interval> intervals)
     {
@@ -84,23 +93,17 @@ public class GeneratorAnalyser
         StringBuilder sb = new();
         foreach (var interval in intervals)
         {
-            string format = "+0,00;-0,00;0,000";
+            string format = "+0.00;-0.00;0.000";
             sb.Append(
-                $"[{interval.StartPoint.ToString(format)}; {interval.EndPoint.ToString(format)}) {interval.Count:D3}: ");
+                $"[{interval.StartPoint.ToString(format)}; {interval.EndPoint.ToString(format)}) {interval.Count} ");
             for (int i = 0; i < interval.Count; i++)
             {
-                sb.Append(".");
+                // sb.Append(".");
             }
 
             sb.AppendLine();
         }
 
         Console.WriteLine(sb.ToString());
-    }
-
-    private void PrintAllIntervalsCount()
-    {
-        Console.Out.WriteLine($"Initial count: {_intervals.Count} \n" +
-                              $"United  count: {_unitedIntervals.Count}");
     }
 }
