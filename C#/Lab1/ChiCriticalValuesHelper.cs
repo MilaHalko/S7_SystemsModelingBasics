@@ -26,18 +26,7 @@ public static class ChiCriticalValuesHelper
         { 20, 31.410 }
     };
 
-    public static bool CheckChiSquared(double chi, int v)
-    {
-        try
-        {
-            return chi < DataDictionary[v];
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("V is out of range for checking Chi-squared");
-            throw;
-        }
-    }
+    public static bool CheckChiSquared(double chi, int v) => chi < GetChiCriticalValue(v);
 
-    public static double GetChiCriticalValue(int v) => DataDictionary[v];
+    public static double GetChiCriticalValue(int v) => v < 1 ? DataDictionary[1] : DataDictionary[v];
 }
