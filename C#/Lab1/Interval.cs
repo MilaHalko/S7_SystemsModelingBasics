@@ -30,7 +30,13 @@ public class Interval
             intervals.Add(CreateAndFillInterval(intervalStart, intervalEnd, numbers));
         }
 
-        intervals[^1].Count++;
+        foreach (var number in numbers)
+        {
+            if (number == max)
+            {
+                intervals[^1].Count++;
+            }
+        }
         return intervals;
     }
 
@@ -58,6 +64,10 @@ public class Interval
                 int leftIndex = DefineLeftIndexForMerging(i, unitedIntervals);
                 int rightIndex = leftIndex + 1;
 
+                if (leftIndex < 0 || rightIndex >= unitedIntervals.Count)
+                {
+                    Console.WriteLine("Something went wrong");
+                }
                 var newInterval = MergeIntervalsLeftWithRight(unitedIntervals[leftIndex], unitedIntervals[rightIndex]);
                 unitedIntervals[leftIndex] = newInterval;
                 unitedIntervals.RemoveAt(rightIndex);
@@ -71,10 +81,12 @@ public class Interval
 
     private static int DefineLeftIndexForMerging(int i, List<Interval> intervals)
     {
+        if (i == 0) return i;
+        if (i == intervals.Count - 1) return i - 1;
         int leftIndex = i - 1;
         if (i + 1 < intervals.Count - 1)
         {
-            if (i == 0 || intervals[i + 1].Count < intervals[i - 1].Count)
+            if (intervals[i + 1].Count < intervals[i - 1].Count)
                 leftIndex = i;
         }
 
