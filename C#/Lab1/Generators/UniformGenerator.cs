@@ -2,20 +2,20 @@
 
 public class UniformGenerator : Generator
 {
-    public long A { get; set; } // 5^13 == 1220703125
-    public long C { get; set; } // 2^31 == 2147483648
-    public long Z { get; set; }
+    public double A { get; set; } // 5^13 == 1220703125
+    public double C { get; set; } // 2^31 == 2147483648
+    public double Z { get; set; }
 
-    public UniformGenerator(long a = 1220703125, long c = 2147483648)
+    public UniformGenerator(double a = 1220703125, double c = 2147483648)
     {
         A = a;
         C = c;
-        Z = new Random().Next();
+        Z = new Random().NextDouble();
     }
 
     protected override double GenerateNumber()
     {
-        Z = A * Z % C;
+        Z = (A * Z) % C;
         return (double)Z / C;
     }
 
