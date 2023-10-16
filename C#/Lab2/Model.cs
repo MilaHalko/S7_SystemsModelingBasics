@@ -1,4 +1,6 @@
-﻿namespace Lab2;
+﻿using Lab2.Elements;
+
+namespace Lab2;
 
 public class Model
 {
@@ -9,44 +11,27 @@ public class Model
     public Model(List<Element> elements)
     {
         this._elements = elements;
-        _tnext = 0.0;
-        _event = 0;
-        _tcurr = _tnext;
     }
 
     public void Simulate(double time)
     {
         while (_tcurr < time)
         {
-            _tnext = double.MaxValue;
-            for (int i = 0; i < _elements.Count; i++)
-            {
-                if (_elements[i].Tnext < _tnext)
-                {
-                    _tnext = _elements[i].Tnext;
-                    _event = i;
-                }
-            }
+            UpdateNextTAndEvent();
+            Console.WriteLine($"\nNext event: {_elements[_event].Name}  Time: {_tnext} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-            Console.WriteLine($"\nIt's time for event in {_elements[_event].Name}, time = {_tnext}");
-
-            foreach (var e in _elements)
-            {
-                e.DoStatistics(_tnext - _tcurr);
-            }
-
+            foreach (var element in _elements)
+                element.DoStatistics(_tnext - _tcurr);
+            
             _tcurr = _tnext;
-
             foreach (var e in _elements)
-            {
-                e.Tcurr = _tcurr;
-            }
+                e.CurrT = _tcurr;
 
             _elements[_event].OutAct();
 
             foreach (var e in _elements)
             {
-                if (e.Tnext == _tcurr)
+                if (e.NextT == _tcurr)
                 {
                     e.OutAct();
                 }
@@ -56,6 +41,19 @@ public class Model
         }
 
         PrintResult();
+    }
+
+    private void UpdateNextTAndEvent()
+    {
+        _tnext = double.MaxValue;
+        for (int i = 0; i < _elements.Count; i++)
+        {
+            if (_elements[i].NextT < _tnext)
+            {
+                _tnext = _elements[i].NextT;
+                _event = i;
+            }
+        }
     }
 
     private void PrintInfo()

@@ -1,13 +1,14 @@
-﻿namespace Lab2;
+﻿namespace Lab2.Elements;
 
 public class Process : Element
 {
     private int _queue;
     private readonly int _maxQueue;
-    public int Failure {get; private set;}
-    public double MeanQueue {get; private set; }
+    public int Failure { get; private set; }
+    public double MeanQueue { get; private set; }
 
-    public Process(double delay = 1.0, string name = "",  string distribution = "exp", int maxQueue = int.MaxValue) : base(delay, name, distribution)
+    public Process(double delay = 1.0, string distribution = "exp", string name = "PROCESS", int maxQueue = int.MaxValue) :
+        base(delay, name, distribution)
     {
         _maxQueue = maxQueue;
     }
@@ -17,7 +18,7 @@ public class Process : Element
         if (State == 0)
         {
             State = 1;
-            Tnext = Tcurr + GetDelay();
+            NextT = CurrT + GetDelay();
         }
         else
         {
@@ -31,13 +32,13 @@ public class Process : Element
     public override void OutAct()
     {
         base.OutAct();
-        Tnext = double.MaxValue;
+        NextT = double.MaxValue;
         State = 0;
         if (_queue > 0)
         {
             _queue--;
             State = 1;
-            Tnext = Tcurr + GetDelay();
+            NextT = CurrT + GetDelay();
         }
     }
 
