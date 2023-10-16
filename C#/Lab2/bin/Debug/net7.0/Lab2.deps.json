@@ -7,8 +7,19 @@
   "targets": {
     ".NETCoreApp,Version=v7.0": {
       "Lab2/1.0.0": {
+        "dependencies": {
+          "DistributionRandomizer": "1.0.0.0"
+        },
         "runtime": {
           "Lab2.dll": {}
+        }
+      },
+      "DistributionRandomizer/1.0.0.0": {
+        "runtime": {
+          "DistributionRandomizer.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
@@ -16,6 +27,11 @@
   "libraries": {
     "Lab2/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DistributionRandomizer/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

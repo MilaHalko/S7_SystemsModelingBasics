@@ -7,4 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="DistributionRandomizer">
+        <HintPath>..\..\libraries\DistributionRandomizer\DistributionRandomizer\bin\Debug\net7.0\DistributionRandomizer.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
