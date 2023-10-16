@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "7muz5/6QCVZVMOlqdrKTRIrRTP6d7nnvaPyyNe0ukMrkPzXBwdjO/PuLZGeup6oSJQcClHdPAve+HoObkWq1Ww==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\milag\\OneDrive\\Documents\\CodeZone\\SMB\\libraries\\DistributionRandomizer\\DistributionRandomizer\\DistributionRandomizer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\milag\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

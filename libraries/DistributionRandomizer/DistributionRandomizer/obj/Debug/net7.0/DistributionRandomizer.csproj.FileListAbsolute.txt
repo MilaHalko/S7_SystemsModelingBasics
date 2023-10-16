@@ -1,0 +1,12 @@
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\bin\Debug\net7.0\DistributionRandomizer.deps.json
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\bin\Debug\net7.0\DistributionRandomizer.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\bin\Debug\net7.0\DistributionRandomizer.pdb
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.csproj.AssemblyReference.cache
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.AssemblyInfoInputs.cache
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.AssemblyInfo.cs
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.csproj.CoreCompileInputs.cache
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\refint\DistributionRandomizer.dll
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.pdb
+C:\Users\milag\OneDrive\Documents\CodeZone\SMB\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\ref\DistributionRandomizer.dll
