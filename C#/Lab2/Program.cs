@@ -3,12 +3,15 @@ using Lab2;
 using Lab2.Elements;
 
 Create c = new Create(2.0);
-Process p = new Process(1.0, maxQueue: 5);
-Console.WriteLine("id0 = " + c.Name + " id1=" + p.Name);
+Process p1 = new Process(2.0, maxQueue: 5);
+Process p2 = new Process(2.0, maxQueue: 5);
+Process p3 = new Process(2.0, maxQueue: 5);
 
-c.NextElement = p;
+c.NextElement = p1;
+p1.NextElement = p2;
+p2.NextElement = p3;
 
-List<Element> list = new List<Element>() { c, p };
+List<Element> list = new List<Element>() { c, p1, p2, p3 };
 
 Model model = new Model(list);
-model.Simulate(200.0);
+model.Simulate(1000.0);
