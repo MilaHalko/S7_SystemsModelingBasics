@@ -2,22 +2,28 @@
 
 public class Process : Element
 {
+    private List<SubProcess> _subProcesses;
     private int _queue;
     private readonly int _maxQueue;
     public int Failure { get; private set; }
     public double MeanQueue { get; private set; }
 
-    public Process(double delay = 1.0, string distribution = "exp", string name = "PROCESS", int maxQueue = int.MaxValue) :
+    public Process(int subProcessCount, double delay = 1.0, string distribution = "exp", string name = "PROCESS",
+        int maxQueue = int.MaxValue) :
         base(delay, name, distribution)
     {
+        for (int i = 0; i < subProcessCount; i++)
+            _subProcesses.Add(new SubProcess(_id, i));
         _maxQueue = maxQueue;
+        NextT = double.MaxValue;
     }
 
     public override void InAct()
     {
-        if (State == 0)
+        base.InAct();
+        if (State < _subProcesses.Count)
         {
-            State = 1;
+            State++;
             NextT = CurrT + GetDelay();
         }
         else
@@ -33,11 +39,11 @@ public class Process : Element
     {
         base.OutAct();
         NextT = double.MaxValue;
-        State = 0;
+        State--;
         if (_queue > 0)
         {
             _queue--;
-            State = 1;
+            State++;
             NextT = CurrT + GetDelay();
         }
     }
@@ -50,6 +56,7 @@ public class Process : Element
 
     public override void DoStatistics(double delta)
     {
+        base.DoStatistics(delta);
         MeanQueue += _queue * delta;
     }
 }
