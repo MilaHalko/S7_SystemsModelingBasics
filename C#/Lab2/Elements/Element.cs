@@ -14,9 +14,11 @@ public abstract class Element
     private readonly Randomizer? _randomizer;
 
     private static int _nextId;
-    private readonly int _id = _nextId;
+    protected readonly int _id = _nextId;
     public readonly string Name;
+    
     public int Quantity { get; private set; }
+    public double WorkTime { get; private set; } 
     protected int State { get; set; }
 
 
@@ -34,24 +36,33 @@ public abstract class Element
         return _delayMean;
     }
 
-    public virtual void InAct() {}
+    public virtual void InAct()
+    {
+    }
 
     public virtual void OutAct()
     {
+        NextElement?.InAct();
         Quantity++;
-    }
-
-    public void PrintResult()
-    {
-        Console.WriteLine($"{Name} quantity = {Quantity}");
     }
 
     public virtual void PrintInfo()
     {
-        Console.WriteLine($"{Name} state= {State} quantity = {Quantity} tnext= {NextT}");
+        string nextTString = NextT == double.MaxValue ? "\u221E" : NextT.ToString();
+        Console.WriteLine($"{Name} state = {State} quantity = {Quantity} tnext= {nextTString}");
     }
 
-    public virtual void DoStatistics(double delta) {}
+    public virtual void DoStatistics(double delta)
+    {
+        WorkTime += delta * State;
+        // Console.Out.WriteLine($"Total workTime of {Name} = " + WorkTime);
+    }
+
+    public void PrintFinalStatistics()
+    {
+        Console.Out.WriteLine($"{Name}:");
+        Console.WriteLine($"\tQuantity = {Quantity}");
+    }
 
     private Randomizer GetRandomizerByName(string distribution)
     {
