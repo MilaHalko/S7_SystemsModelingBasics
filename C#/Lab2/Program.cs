@@ -3,9 +3,9 @@ using Lab2;
 using Lab2.Elements;
 
 Create c = new Create(2.0);
-Process p1 = new Process(2.0, maxQueue: 5);
-Process p2 = new Process(2.0, maxQueue: 5);
-Process p3 = new Process(2.0, maxQueue: 5);
+Process p1 = new Process(1, 2.0, maxQueue: 5);
+Process p2 = new Process(1, 2.0, maxQueue: 5);
+Process p3 = new Process(1, 2.0, maxQueue: 5);
 
 c.NextElement = p1;
 p1.NextElement = p2;
