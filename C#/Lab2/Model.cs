@@ -17,7 +17,7 @@ public class Model
     {
         while (_tcurr < time)
         {
-            UpdateNextTAndEvent();
+            UpdateEventAndNextT();
             Console.WriteLine($"\nNext event: {_elements[_event].Name}  Time: {_tnext} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
             foreach (var element in _elements)
@@ -27,23 +27,13 @@ public class Model
             foreach (var e in _elements)
                 e.CurrT = _tcurr;
 
-            _elements[_event].OutAct();
-
-            foreach (var e in _elements)
-            {
-                if (e.NextT == _tcurr)
-                {
-                    e.OutAct();
-                }
-            }
-
-            PrintInfo();
+            OutActForAllCurrentElements();
+            PrintInfoForAllElements();
         }
-
         PrintResult();
     }
 
-    private void UpdateNextTAndEvent()
+    private void UpdateEventAndNextT()
     {
         _tnext = double.MaxValue;
         for (int i = 0; i < _elements.Count; i++)
@@ -56,24 +46,29 @@ public class Model
         }
     }
 
-    private void PrintInfo()
+    private void OutActForAllCurrentElements()
+    {
+        foreach (var element in _elements)
+            if (element.NextT == _tcurr) element.OutAct();
+    }
+
+    private void PrintInfoForAllElements()
     {
         foreach (var e in _elements)
-        {
             e.PrintInfo();
-        }
     }
 
     private void PrintResult()
     {
         Console.WriteLine("\n-------------RESULTS-------------");
-        foreach (var e in _elements)
+        foreach (var element in _elements)
         {
-            e.PrintResult();
-            if (e is Process p)
+            element.PrintFinalStatistics();
+            if (element is Process p)
             {
-                Console.WriteLine($"mean length of queue = {p.MeanQueue / _tcurr}");
-                Console.WriteLine($"failure probability = {p.Failure / (double)p.Quantity}");
+                Console.Out.WriteLine($"\tWorkTime = {p.WorkTime / _tcurr}");
+                Console.WriteLine($"\tMean length of queue = {p.MeanQueue / _tcurr}");
+                Console.WriteLine($"\tFailure probability  = {p.Failure / (double)p.Quantity}");
             }
         }
     }
