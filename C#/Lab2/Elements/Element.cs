@@ -19,6 +19,7 @@ public abstract class Element
     
     public int Quantity { get; private set; }
     public double WorkTime { get; private set; } 
+    // TODO: Remove State
     protected int State { get; set; }
 
 
