@@ -3,11 +3,9 @@
 public class SubProcess
 {
     private int _id;
-    public string Name;
-    
-    // TODO:Set to IsFree or IsBusy
-    public int State { get; set; }
-    public double NextT { get; set; } = double.MaxValue;
+    public readonly string Name;
+    public bool IsWorking { get; private set; }
+    public double NextT { get; private set; } = double.MaxValue;
     
     public int Quantity { get; private set; }
     public double WorkTime { get; private set; }
@@ -20,19 +18,18 @@ public class SubProcess
 
     public void InAct(double nextT)
     {
-        State = 1;
+        IsWorking = true;
         NextT = nextT;
     }
-
     
     public void DoStatistics(double delta)
     {
-        WorkTime += delta * State;
+        WorkTime += IsWorking? delta : 0;
     }
 
     public void OutAct()
     {
-        State = 0;
+        IsWorking = false;
         NextT = double.MaxValue;
         Quantity++;
     }

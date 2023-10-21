@@ -2,7 +2,7 @@
 
 public class Process : Element
 {
-    private List<SubProcess> _subProcesses = new List<SubProcess>();
+    private List<SubProcess> _subProcesses = new();
     private int _queue;
     private readonly int _maxQueue;
     public int Failure { get; private set; }
@@ -18,24 +18,28 @@ public class Process : Element
         NextT = double.MaxValue;
     }
 
+    public int WorkingSubProcessesCount => _subProcesses.Count(s => s.IsWorking);
+
+    private SubProcess GetFreeSubProcess() => _subProcesses.First(s => !s.IsWorking);
+
+    private List<SubProcess> GetBusySubProcesses() =>
+        _subProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
+
+    private void UpdateNextT() => NextT = _subProcesses.Min(s => s.NextT);
+
     public override void InAct()
     {
-        if (State < _subProcesses.Count)
-        {
-            State++;
+        base.InAct();
+        if (WorkingSubProcessesCount < _subProcesses.Count)
             GetFreeSubProcess().InAct(CurrT + GetDelay());
-        }
         else
         {
             if (_queue < _maxQueue) _queue++;
             else Failure++;
         }
+
         UpdateNextT();
     }
-
-    private void UpdateNextT() => NextT = _subProcesses.Min(s => s.NextT);
-
-    private SubProcess GetFreeSubProcess() => _subProcesses.First(s => s.State == 0);
 
     public override void OutAct()
     {
@@ -43,26 +47,26 @@ public class Process : Element
         foreach (var subProcess in busySubProcesses)
         {
             subProcess.OutAct();
-            State--;
             base.OutAct();
             if (_queue > 0)
             {
                 _queue--;
-                State++;
                 subProcess.InAct(CurrT + GetDelay());
             }
         }
+
         UpdateNextT();
     }
 
-    private List<SubProcess> GetBusySubProcesses() =>
-        _subProcesses.Where(s => s.NextT <= CurrT && s.State == 1).ToList();
-
     public override void PrintInfo()
     {
-        base.PrintInfo();
+        Console.WriteLine(
+            $"{Name} state = {IsWorking} quantity = {Quantity} tnext= {NextTString(NextT)} queue = {_queue}");
+        foreach (var subProcess in _subProcesses)
+            Console.WriteLine($"\t{subProcess.Name} state = {subProcess.IsWorking} tnext = {NextTString(subProcess.NextT)}");
         Console.WriteLine($"failure = {this.Failure}");
     }
+
 
     public override void DoStatistics(double delta)
     {

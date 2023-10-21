@@ -20,7 +20,7 @@ public abstract class Element
     public int Quantity { get; private set; }
     public double WorkTime { get; private set; } 
     // TODO: Remove State
-    protected int State { get; set; }
+    protected bool IsWorking { get; set; }
 
 
     protected Element(double delay, string name, string distribution = "exp")
@@ -39,10 +39,12 @@ public abstract class Element
 
     public virtual void InAct()
     {
+        IsWorking = true;
     }
 
     public virtual void OutAct()
     {
+        IsWorking = false;
         NextElement?.InAct();
         Quantity++;
     }
@@ -50,12 +52,12 @@ public abstract class Element
     public virtual void PrintInfo()
     {
         string nextTString = NextT == double.MaxValue ? "\u221E" : NextT.ToString();
-        Console.WriteLine($"{Name} state = {State} quantity = {Quantity} tnext= {nextTString}");
+        Console.WriteLine($"{Name} state = {IsWorking} quantity = {Quantity} tnext= {nextTString}");
     }
 
     public virtual void DoStatistics(double delta)
     {
-        WorkTime += delta * State;
+        WorkTime += IsWorking? delta : 0;
         // Console.Out.WriteLine($"Total workTime of {Name} = " + WorkTime);
     }
 
@@ -82,4 +84,6 @@ public abstract class Element
                 throw new ArgumentException("Unknown distribution");
         }
     }
+    
+    public static string NextTString(double nextT) => nextT == double.MaxValue ? "\u221E" : nextT.ToString();
 }
