@@ -24,14 +24,14 @@ public class Model
                 element.DoStatistics(_tnext - _tcurr);
             
             _tcurr = _tnext;
-            foreach (var e in _elements)
-                e.CurrT = _tcurr;
-
+            UpgradeCurrTForAllElements();
             OutActForAllCurrentElements();
             PrintInfoForAllElements();
         }
         PrintResult();
     }
+
+    private void UpgradeCurrTForAllElements() => _elements.ForEach(e => e.CurrT = _tcurr);
 
     private void UpdateEventAndNextT()
     {
@@ -48,8 +48,7 @@ public class Model
 
     private void OutActForAllCurrentElements()
     {
-        foreach (var element in _elements)
-            if (element.NextT == _tcurr) element.OutAct();
+        foreach (var element in _elements) if (element.NextT == _tcurr) element.OutAct();
     }
 
     private void PrintInfoForAllElements()
