@@ -3,12 +3,12 @@ namespace Lab2.NextElement;
 
 public struct NextElement
 {
-    public Element nextElement;
-    public double probability;
+    public readonly Element Element;
+    public readonly double Probability;
 
     public NextElement(Element element, double probability)
     {
-        nextElement = element;
-        this.probability = probability;
+        Element = element;
+        Probability = probability;
     }
 }

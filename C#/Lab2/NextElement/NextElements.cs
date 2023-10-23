@@ -4,18 +4,18 @@ namespace Lab2.NextElement;
 
 public class NextElements
 {
-    public List<NextElement> NextElementsList { get; set; } = new();
+    private List<NextElement> NextElementsList { get; } = new();
 
     public void AddNextElement(Element element, double probability = 1) => NextElementsList.Add(new NextElement(element, probability));
 
-    private NextElement getNextElement()
+    private NextElement GetNextElement()
     {
-        double sum = NextElementsList.Sum(nextElement => nextElement.probability);
+        double sum = NextElementsList.Sum(nextElement => nextElement.Probability);
         double random = new Random().NextDouble() * sum;
         double current = 0;
         foreach (var nextElement in NextElementsList)
         {
-            current += nextElement.probability;
+            current += nextElement.Probability;
             if (random < current)
                 return nextElement;
         }
@@ -24,6 +24,6 @@ public class NextElements
 
     public void InAct()
     {
-        getNextElement().nextElement.InAct();
+        GetNextElement().Element.InAct();
     }
 }
