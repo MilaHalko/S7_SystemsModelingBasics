@@ -2,16 +2,16 @@
 using Lab2;
 using Lab2.Elements;
 
-Create c = new Create(0.7);
-Process p1 = new Process(2, 2.0, maxQueue: 5);
-// Process p2 = new Process(1, 2.0, maxQueue: 5);
-// Process p3 = new Process(1, 2.0, maxQueue: 5);
+Create c = new Create(1);
+Process p1 = new Process(2, 2.0, maxQueue: 3);
+Process p2 = new Process(2, 1.0, maxQueue: 3);
+Process p3 = new Process(1, 2.0, maxQueue: 3);
 
-c.NextElement = p1;
-// p1.NextElement = p2;
-// p2.NextElement = p3;
+c.SetNextElement(p1);
+p1.SetNextElement(p2);
+p1.SetNextElement(p3, 10);
 
-List<Element> list = new List<Element>() { c, p1, /*p2, p3*/ };
+List<Element> list = new List<Element>() { c, p1, p2, p3 };
 
 Model model = new Model(list);
-model.Simulate(10.0);
+model.Simulate(20.0);

@@ -1,8 +1,10 @@
 ﻿
 
 using DistributionRandomizer.DelayRandomizers;
+using Lab2.NextElement;
 
 namespace Lab2.Elements;
+
 
 public abstract class Element
 {
@@ -10,7 +12,7 @@ public abstract class Element
     public double CurrT { get; set; }
     private readonly double _delayMean;
     private readonly double _delayDeviation;
-    public Element? NextElement { get; set; }
+    public NextElements? NextElement;
     private readonly Randomizer? _randomizer;
 
     private static int _nextId;
@@ -19,7 +21,6 @@ public abstract class Element
     
     public int Quantity { get; private set; }
     public double WorkTime { get; private set; } 
-    // TODO: Remove State
     protected bool IsWorking { get; set; }
 
 
@@ -29,6 +30,13 @@ public abstract class Element
         Name += $"{name}_{_id}";
         _randomizer = GetRandomizerByName(distribution);
         _nextId++;
+    }
+
+    public void SetNextElement(Element element, double probability = 1)
+    {
+        if (NextElement == null)
+            NextElement = new NextElements();
+        NextElement.AddNextElement(element, probability);
     }
 
     protected double GetDelay()
