@@ -1,40 +1,38 @@
-﻿namespace Lab2.Elements;
+﻿using Lab2.Print;
+
+namespace Lab2.Elements;
 
 public class Process : Element
 {
-    private List<SubProcess> _subProcesses = new();
-    private int _queue;
-    private readonly int _maxQueue;
     public int Failure { get; private set; }
     public double MeanQueue { get; private set; }
-
+    public int Queue { get; private set; }
+    public List<SubProcess> SubProcesses { get; private set; } = new();
+    private readonly int _maxQueue;
+    
+    private int WorkingSubProcessesCount => SubProcesses.Count(s => s.IsWorking);
+    private SubProcess FreeSubProcess => SubProcesses.First(s => !s.IsWorking);
+    private List<SubProcess> BusySubProcesses => SubProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
+    
     public Process(int subProcessCount, double delay = 1.0, string distribution = "exp", string name = "PROCESS",
         int maxQueue = int.MaxValue) :
         base(delay, name, distribution)
     {
         for (int i = 0; i < subProcessCount; i++)
-            _subProcesses.Add(new SubProcess(_id, i));
+            SubProcesses.Add(new SubProcess(Id, i));
         _maxQueue = maxQueue;
         NextT = double.MaxValue;
+        Print = new ProcessPrinter(this);
     }
-
-    public int WorkingSubProcessesCount => _subProcesses.Count(s => s.IsWorking);
-
-    private SubProcess GetFreeSubProcess() => _subProcesses.First(s => !s.IsWorking);
-
-    private List<SubProcess> GetBusySubProcesses() =>
-        _subProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
-
-    private void UpdateNextT() => NextT = _subProcesses.Min(s => s.NextT);
 
     public override void InAct()
     {
         base.InAct();
-        if (WorkingSubProcessesCount < _subProcesses.Count)
-            GetFreeSubProcess().InAct(CurrT + GetDelay());
+        if (WorkingSubProcessesCount < SubProcesses.Count)
+            FreeSubProcess.InAct(CurrT + GetDelay());
         else
         {
-            if (_queue < _maxQueue) _queue++;
+            if (Queue < _maxQueue) Queue++;
             else Failure++;
         }
 
@@ -43,34 +41,24 @@ public class Process : Element
 
     public override void OutAct()
     {
-        var busySubProcesses = GetBusySubProcesses();
-        foreach (var subProcess in busySubProcesses)
+        foreach (var subProcess in BusySubProcesses)
         {
             subProcess.OutAct();
             base.OutAct();
-            if (_queue > 0)
+            if (Queue > 0)
             {
-                _queue--;
+                Queue--;
                 subProcess.InAct(CurrT + GetDelay());
             }
         }
-
         UpdateNextT();
     }
-
-    public override void PrintInfo()
-    {
-        Console.WriteLine(
-            $"{Name} state = {IsWorking} quantity = {Quantity} tnext= {NextTString(NextT)} queue = {_queue}");
-        foreach (var subProcess in _subProcesses)
-            Console.WriteLine($"\t{subProcess.Name} state = {subProcess.IsWorking} tnext = {NextTString(subProcess.NextT)}");
-        Console.WriteLine($"failure = {this.Failure}");
-    }
-
 
     public override void DoStatistics(double delta)
     {
         base.DoStatistics(delta);
-        MeanQueue += _queue * delta;
+        MeanQueue += Queue * delta;
     }
+
+    protected override void UpdateNextT() => NextT = SubProcesses.Min(s => s.NextT);
 }

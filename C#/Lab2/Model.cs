@@ -1,4 +1,5 @@
 ﻿using Lab2.Elements;
+using Lab2.Print;
 
 namespace Lab2;
 
@@ -10,7 +11,7 @@ public class Model
 
     public Model(List<Element> elements)
     {
-        this._elements = elements;
+        _elements = elements;
     }
 
     public void Simulate(double time)
@@ -26,9 +27,9 @@ public class Model
             _tcurr = _tnext;
             UpgradeCurrTForAllElements();
             OutActForAllCurrentElements();
-            PrintInfoForAllElements();
+            IPrinter.Info(_elements);
         }
-        PrintResult();
+        IPrinter.Result(_elements);
     }
 
     private void UpgradeCurrTForAllElements() => _elements.ForEach(e => e.CurrT = _tcurr);
@@ -49,26 +50,5 @@ public class Model
     private void OutActForAllCurrentElements()
     {
         foreach (var element in _elements) if (element.NextT == _tcurr) element.OutAct();
-    }
-
-    private void PrintInfoForAllElements()
-    {
-        foreach (var e in _elements)
-            e.PrintInfo();
-    }
-
-    private void PrintResult()
-    {
-        Console.WriteLine("\n-------------RESULTS-------------");
-        foreach (var element in _elements)
-        {
-            element.PrintFinalStatistics();
-            if (element is Process p)
-            {
-                Console.Out.WriteLine($"\tWorkTime = {p.WorkTime / _tcurr}");
-                Console.WriteLine($"\tMean length of queue = {p.MeanQueue / _tcurr}");
-                Console.WriteLine($"\tFailure probability  = {p.Failure / (double)p.Quantity}");
-            }
-        }
     }
 }
