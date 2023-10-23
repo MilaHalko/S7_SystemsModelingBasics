@@ -1,16 +1,12 @@
-﻿using Lab2.Elements;
-
-namespace Lab2;
+﻿namespace Lab2.Elements;
 
 public class Create : Element
 {
     public Create(double delay = 1.0, string distribution = "exp", string name = "CREATE") : 
         base(delay, name, distribution) { }
 
-    public override void OutAct()
+    protected override void UpdateNextT()
     {
-        base.OutAct();
         NextT = CurrT + GetDelay();
     }
-
 }
