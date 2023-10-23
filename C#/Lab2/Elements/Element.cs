@@ -1,43 +1,58 @@
-﻿
-
-using DistributionRandomizer.DelayRandomizers;
+﻿using DistributionRandomizer.DelayRandomizers;
 using Lab2.NextElement;
+using Lab2.Print;
 
 namespace Lab2.Elements;
-
 
 public abstract class Element
 {
     public double NextT { get; protected set; }
     public double CurrT { get; set; }
+    public int Quantity { get; private set; }
+    public double WorkTime { get; private set; }
+    public bool IsWorking { private set; get; }
+    public IPrinter Print { get; protected init; }
+    public readonly string Name;
+
+    private NextElements? _nextElement;
     private readonly double _delayMean;
     private readonly double _delayDeviation;
-    public NextElements? NextElement;
     private readonly Randomizer? _randomizer;
 
+    protected readonly int Id = _nextId;
     private static int _nextId;
-    protected readonly int _id = _nextId;
-    public readonly string Name;
-    
-    public int Quantity { get; private set; }
-    public double WorkTime { get; private set; } 
-    protected bool IsWorking { get; set; }
-
 
     protected Element(double delay, string name, string distribution = "exp")
     {
         _delayMean = delay;
-        Name += $"{name}_{_id}";
+        Name += $"{name}_{Id}";
         _randomizer = GetRandomizerByName(distribution);
         _nextId++;
+        Print = new ElementPrinter(this);
     }
 
     public void SetNextElement(Element element, double probability = 1)
     {
-        if (NextElement == null)
-            NextElement = new NextElements();
-        NextElement.AddNextElement(element, probability);
+        _nextElement ??= new NextElements();
+        _nextElement.AddNextElement(element, probability);
     }
+
+
+    public virtual void InAct() => IsWorking = true;
+
+    public virtual void OutAct()
+    {
+        IsWorking = false;
+        _nextElement?.InAct();
+        Quantity++;
+        UpdateNextT();
+    }
+
+    public virtual void DoStatistics(double delta)
+    {
+        WorkTime += IsWorking ? delta : 0;
+    }
+
 
     protected double GetDelay()
     {
@@ -45,35 +60,8 @@ public abstract class Element
         return _delayMean;
     }
 
-    public virtual void InAct()
-    {
-        IsWorking = true;
-    }
+    protected abstract void UpdateNextT();
 
-    public virtual void OutAct()
-    {
-        IsWorking = false;
-        NextElement?.InAct();
-        Quantity++;
-    }
-
-    public virtual void PrintInfo()
-    {
-        string nextTString = NextT == double.MaxValue ? "\u221E" : NextT.ToString();
-        Console.WriteLine($"{Name} state = {IsWorking} quantity = {Quantity} tnext= {nextTString}");
-    }
-
-    public virtual void DoStatistics(double delta)
-    {
-        WorkTime += IsWorking? delta : 0;
-        // Console.Out.WriteLine($"Total workTime of {Name} = " + WorkTime);
-    }
-
-    public void PrintFinalStatistics()
-    {
-        Console.Out.WriteLine($"{Name}:");
-        Console.WriteLine($"\tQuantity = {Quantity}");
-    }
 
     private Randomizer GetRandomizerByName(string distribution)
     {
@@ -92,6 +80,4 @@ public abstract class Element
                 throw new ArgumentException("Unknown distribution");
         }
     }
-    
-    public static string NextTString(double nextT) => nextT == double.MaxValue ? "\u221E" : nextT.ToString();
 }
