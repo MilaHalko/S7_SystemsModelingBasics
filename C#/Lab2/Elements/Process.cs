@@ -7,7 +7,7 @@ public class Process : Element
     public int Failure { get; private set; }
     public double MeanQueue { get; private set; }
     public int Queue { get; private set; }
-    public List<SubProcess> SubProcesses { get; private set; } = new();
+    public List<SubProcess> SubProcesses { get; } = new();
     private readonly int _maxQueue;
     
     private int WorkingSubProcessesCount => SubProcesses.Count(s => s.IsWorking);
@@ -57,6 +57,7 @@ public class Process : Element
     public override void DoStatistics(double delta)
     {
         base.DoStatistics(delta);
+        foreach (var subProcess in SubProcesses) subProcess.DoStatistics(delta);
         MeanQueue += Queue * delta;
     }
 
