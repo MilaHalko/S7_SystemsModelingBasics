@@ -9,6 +9,7 @@ public abstract class Element
     public double NextT { get; protected set; }
     public double CurrT { get; set; }
     public int Quantity { get; private set; }
+    public int QuantityProcessed { get; private set; }
     public double WorkTime { get; private set; }
     public bool IsWorking { private set; get; }
     public IPrinter Print { get; protected init; }
@@ -38,13 +39,17 @@ public abstract class Element
     }
 
 
-    public virtual void InAct() => IsWorking = true;
+    public virtual void InAct()
+    {
+        Quantity++;
+        IsWorking = true;
+    }
 
     public virtual void OutAct()
     {
+        QuantityProcessed++;
         IsWorking = false;
         _nextElement?.InAct();
-        Quantity++;
         UpdateNextT();
     }
 
