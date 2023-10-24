@@ -15,7 +15,6 @@ public class SubProcessPrinter : IPrinter
     {
         Console.Out.WriteLine($"\t{s.Name}:");
         Console.WriteLine($"\t\tQuantity = {s.Quantity}");
-        Console.WriteLine($"\t\tWorkTime = {s.WorkTime}");
     }
 
     public void Info()
