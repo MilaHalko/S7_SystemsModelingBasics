@@ -21,4 +21,9 @@ public interface IPrinter
         foreach (var element in elements)
             element.Print.Statistics();
     }
+
+    public static void PrintCurrent(Element element)
+    {
+        Console.WriteLine($"\nNext event: {element.Name}  Time: {element.NextT} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
 }
