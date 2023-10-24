@@ -21,6 +21,7 @@ public class SubProcess
     public void InAct(double nextT)
     {
         IsWorking = true;
+        Quantity++;
         NextT = nextT;
     }
 
@@ -28,7 +29,6 @@ public class SubProcess
     {
         IsWorking = false;
         NextT = double.MaxValue;
-        Quantity++;
     }
 
     public void DoStatistics(double delta)
