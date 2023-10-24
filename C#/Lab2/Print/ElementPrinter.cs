@@ -11,15 +11,16 @@ public class ElementPrinter : IPrinter
         e = element;
     }
 
-    public void Statistics()
-    {
-        Console.Out.WriteLine($"\t{e.Name}:");
-        Console.WriteLine($"\t\tQuantity = {e.Quantity}");
-        Console.WriteLine($"\t\tWorkTime = {e.WorkTime}");
-    }
-
     public void Info()
     {
-        Console.WriteLine($"\t{e.Name} state = {e.IsWorking} quantity = {e.Quantity} tnext= {IPrinter.Format(e.NextT)}");
+        Console.WriteLine($"{e.Name} state = {e.IsWorking} quantity = {e.Quantity} tnext= {IPrinter.Format(e.NextT)}\n");
+    }
+
+    public void Statistics()
+    {
+        Console.Out.WriteLine($"{e.Name}:");
+        Console.WriteLine($"\tQuantity = {e.Quantity}");
+        Console.WriteLine($"\tQuantity processed = {e.QuantityProcessed}");
+        Console.WriteLine($"\tWorkTime = {e.WorkTime}");
     }
 }
