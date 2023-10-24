@@ -16,18 +16,23 @@ public class Model
 
     public void Simulate(double time)
     {
+        int printTrigger = 0;
         while (_tcurr < time)
         {
             UpdateEventAndNextT();
-            Console.WriteLine($"\nNext event: {_elements[_event].Name}  Time: {_tnext} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
+            // IPrinter.PrintCurrent(_elements[_event]);
             foreach (var element in _elements)
                 element.DoStatistics(_tnext - _tcurr);
             
             _tcurr = _tnext;
             UpgradeCurrTForAllElements();
             OutActForAllCurrentElements();
-            IPrinter.Info(_elements);
+            // IPrinter.Info(_elements);
+            if (_tcurr >= printTrigger)
+            {
+                printTrigger += 100000;
+                Console.WriteLine($"tcurr = {_tcurr}");
+            }
         }
         IPrinter.Result(_elements);
     }
