@@ -2,11 +2,10 @@
 
 namespace MassServiceModeling.NextElement;
 
-public struct NextElement
+public class NextElement
 {
     public readonly Element Element;
     public readonly double Probability;
-
     public NextElement(Element element, double probability)
     {
         Element = element;
