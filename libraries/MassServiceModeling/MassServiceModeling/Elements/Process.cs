@@ -1,4 +1,5 @@
 ﻿using MassServiceModeling.Enums;
+using MassServiceModeling.NextElement;
 using MassServiceModeling.Printers;
 
 namespace MassServiceModeling.Elements;
@@ -7,7 +8,7 @@ public class Process : Element
 {
     public int Failure { get; private set; }
     public double MeanQueue { get; private set; }
-    public int Queue { get; private set; }
+    public int Queue { get; protected set; }
     public List<SubProcess> SubProcesses { get; } = new();
     private readonly int _maxQueue;
     
@@ -15,9 +16,10 @@ public class Process : Element
     private SubProcess FreeSubProcess => SubProcesses.First(s => !s.IsWorking);
     private List<SubProcess> BusySubProcesses => SubProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
     
-    public Process(int subProcessCount, double delay = 1.0, Distribution distribution = Distribution.Exponential, string name = "PROCESS",
+    // TODO: remove NextElementsContainer from constructor
+    public Process(int subProcessCount = 1, double delay = 1.0, NextElementsContainer nextElementsContainer = null, Distribution distribution = Distribution.Exponential, string name = "PROCESS",
         int maxQueue = int.MaxValue) :
-        base(delay, name, distribution)
+        base(delay, name, nextElementsContainer, distribution)
     {
         for (int i = 0; i < subProcessCount; i++)
             SubProcesses.Add(new SubProcess(Id, i));

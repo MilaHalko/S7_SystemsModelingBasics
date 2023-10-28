@@ -7,7 +7,7 @@ namespace MassServiceModeling.Elements;
 
 public abstract class Element
 {
-    public double NextT { get; protected set; }
+    public double NextT { get; set; }
     public double CurrT { get; set; }
     public int Quantity { get; private set; }
     public int QuantityProcessed { get; private set; }
@@ -16,7 +16,7 @@ public abstract class Element
     public IPrinter Print { get; protected init; }
     public readonly string Name;
 
-    private NextElements? _nextElement;
+    public NextElementsContainer? _nextElementsContainer;
     private readonly double _delayMean;
     private readonly double _delayDeviation;
     private readonly Randomizer? _randomizer;
@@ -24,21 +24,16 @@ public abstract class Element
     protected readonly int Id = _nextId;
     private static int _nextId;
 
-    protected Element(double delay, string name, Distribution distribution = Distribution.Exponential)
+    // TODO: remove NextElementsContainer from constructor
+    protected Element(double delay, string name, NextElementsContainer nextElementsContainer = null, Distribution distribution = Distribution.Exponential)
     {
         _delayMean = delay;
         Name += $"{name}_{Id}";
+        _nextElementsContainer = nextElementsContainer;
         _randomizer = GetRandomizer(distribution);
         _nextId++;
         Print = new ElementPrinter(this);
     }
-
-    public void SetNextElement(Element element, double probability = 1)
-    {
-        _nextElement ??= new NextElements();
-        _nextElement.AddNextElement(element, probability);
-    }
-
 
     public virtual void InAct()
     {
@@ -50,7 +45,7 @@ public abstract class Element
     {
         QuantityProcessed++;
         IsWorking = false;
-        _nextElement?.InAct();
+        _nextElementsContainer?.InAct();
         UpdateNextT();
     }
 
