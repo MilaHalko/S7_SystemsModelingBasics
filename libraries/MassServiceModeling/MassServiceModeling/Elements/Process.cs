@@ -1,5 +1,4 @@
-﻿using MassServiceModeling.Enums;
-using MassServiceModeling.NextElement;
+﻿using DistributionRandomizer.DelayRandomizers;
 using MassServiceModeling.Printers;
 
 namespace MassServiceModeling.Elements;
@@ -8,18 +7,18 @@ public class Process : Element
 {
     public int Failure { get; private set; }
     public double MeanQueue { get; private set; }
-    public int Queue { get; protected set; }
+    public int Queue { get; set; }
     public List<SubProcess> SubProcesses { get; } = new();
+
+    public event Action? OnQueueChanged;
+
     private readonly int _maxQueue;
-    
     private int WorkingSubProcessesCount => SubProcesses.Count(s => s.IsWorking);
     private SubProcess FreeSubProcess => SubProcesses.First(s => !s.IsWorking);
     private List<SubProcess> BusySubProcesses => SubProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
-    
-    // TODO: remove NextElementsContainer from constructor
-    public Process(int subProcessCount = 1, double delay = 1.0, NextElementsContainer nextElementsContainer = null, Distribution distribution = Distribution.Exponential, string name = "PROCESS",
-        int maxQueue = int.MaxValue) :
-        base(delay, name, nextElementsContainer, distribution)
+
+    public Process(Randomizer randomizer, int subProcessCount = 1, string name = "PROCESS", int maxQueue = int.MaxValue) :
+        base(randomizer, name)
     {
         for (int i = 0; i < subProcessCount; i++)
             SubProcesses.Add(new SubProcess(Id, i));
@@ -28,6 +27,9 @@ public class Process : Element
         Print = new ProcessPrinter(this);
     }
 
+    public Process(double delay = 1.0, int subProcessCount = 1, string name = "PROCESS", int maxQueue = int.MaxValue) :
+        this(new ExponentialRandomizer(delay), subProcessCount, name, maxQueue) {}
+
     public override void InAct()
     {
         base.InAct();
@@ -35,7 +37,11 @@ public class Process : Element
             FreeSubProcess.InAct(CurrT + GetDelay());
         else
         {
-            if (Queue < _maxQueue) Queue++;
+            if (Queue < _maxQueue)
+            {
+                Queue++;
+                OnQueueChanged?.Invoke();
+            }
             else Failure++;
         }
 
@@ -50,10 +56,13 @@ public class Process : Element
             base.OutAct();
             if (Queue > 0)
             {
+                IsWorking = true;
                 Queue--;
+                OnQueueChanged?.Invoke();
                 subProcess.InAct(CurrT + GetDelay());
             }
         }
+
         UpdateNextT();
     }
 
