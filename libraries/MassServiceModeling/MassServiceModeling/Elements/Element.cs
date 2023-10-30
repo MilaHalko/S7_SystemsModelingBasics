@@ -11,7 +11,7 @@ public abstract class Element
     public int Quantity { get; private set; }
     public int QuantityProcessed { get; private set; }
     public double WorkTime { get; private set; }
-    public bool IsWorking { private set; get; }
+    public bool IsWorking { protected set; get; }
     public IPrinter Print { get; protected init; }
     public NextElementsContainer? NextElementsContainer;
 
