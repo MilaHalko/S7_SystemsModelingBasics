@@ -1,17 +1,16 @@
-﻿using MassServiceModeling.Enums;
-using MassServiceModeling.NextElement;
+﻿using DistributionRandomizer.DelayRandomizers;
 using MassServiceModeling.Printers;
 
 namespace MassServiceModeling.Elements;
 
 public class Create : Element
 {
-    // TODO: remove NextElementsContainer from constructor
-    public Create(double delay = 1.0, NextElementsContainer nextElementsContainer = null, Distribution distribution = Distribution.Exponential, string name = "CREATE") :
-        base(delay, name, nextElementsContainer, distribution)
+    public Create(Randomizer randomizer, string name = "CREATE") : base(randomizer, name)
     {
         Print = new CreatePrinter(this);
     }
+
+    public Create(double delay = 1.0, string name = "CREATE") : this(new ExponentialRandomizer(delay), name) {}
 
     protected override void UpdateNextT()
     {

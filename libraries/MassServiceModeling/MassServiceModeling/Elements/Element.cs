@@ -1,5 +1,4 @@
 ﻿using DistributionRandomizer.DelayRandomizers;
-using MassServiceModeling.Enums;
 using MassServiceModeling.NextElement;
 using MassServiceModeling.Printers;
 
@@ -14,26 +13,21 @@ public abstract class Element
     public double WorkTime { get; private set; }
     public bool IsWorking { private set; get; }
     public IPrinter Print { get; protected init; }
+    public NextElementsContainer? NextElementsContainer;
+
+
     public readonly string Name;
-
-    public NextElementsContainer? _nextElementsContainer;
-    private readonly double _delayMean;
-    private readonly double _delayDeviation;
-    private readonly Randomizer? _randomizer;
-
     protected readonly int Id = _nextId;
     private static int _nextId;
+    private Randomizer _randomizer;
 
-    // TODO: remove NextElementsContainer from constructor
-    protected Element(double delay, string name, NextElementsContainer nextElementsContainer = null, Distribution distribution = Distribution.Exponential)
+    protected Element(Randomizer randomizer, string name)
     {
-        _delayMean = delay;
+        _randomizer = randomizer;
         Name += $"{name}_{Id}";
-        _nextElementsContainer = nextElementsContainer;
-        _randomizer = GetRandomizer(distribution);
         _nextId++;
         Print = new ElementPrinter(this);
-    }
+    } 
 
     public virtual void InAct()
     {
@@ -45,7 +39,7 @@ public abstract class Element
     {
         QuantityProcessed++;
         IsWorking = false;
-        _nextElementsContainer?.InAct();
+        NextElementsContainer?.InAct();
         UpdateNextT();
     }
 
@@ -55,23 +49,7 @@ public abstract class Element
     }
 
 
-    protected double GetDelay()
-    {
-        if (_randomizer != null) return _randomizer.GenerateDelay();
-        return _delayMean;
-    }
+    protected double GetDelay() => _randomizer.GenerateDelay();
 
     protected abstract void UpdateNextT();
-
-
-    private Randomizer GetRandomizer(Distribution distribution)
-    {
-        switch (distribution)
-        {
-            case Distribution.Exponential: return new ExponentialRandomizer(_delayMean);
-            case Distribution.Normal: return new NormalRandomizer(_delayMean, _delayDeviation);
-            case Distribution.Uniform: return new UniformRandomizer(_delayMean, _delayDeviation);
-            default: throw new ArgumentOutOfRangeException(nameof(distribution), distribution, null);
-        }
-    }
 }
