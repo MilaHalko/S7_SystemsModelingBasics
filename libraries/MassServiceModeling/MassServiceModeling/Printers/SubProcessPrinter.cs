@@ -20,6 +20,6 @@ public class SubProcessPrinter : IPrinter
     public void Info()
     {
         Console.WriteLine(
-            $"\t{s.Name} state = {s.IsWorking} quantity = {s.Quantity} tnext= {IPrinter.Format(s.NextT)}");
+            $"\t{s.Name}{IPrinter.PrintState(s.IsWorking)}\t quantity={s.Quantity} tnext={IPrinter.Format(s.NextT)}");
     }
 }

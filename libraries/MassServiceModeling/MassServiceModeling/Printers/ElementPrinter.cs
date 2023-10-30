@@ -13,7 +13,7 @@ public class ElementPrinter : IPrinter
 
     public void Info()
     {
-        Console.WriteLine($"{e.Name} state = {e.IsWorking} quantity = {e.Quantity} tnext= {IPrinter.Format(e.NextT)}\n");
+        Console.WriteLine($"{e.Name} state={IPrinter.PrintState(e.IsWorking)} quantity={e.Quantity} tnext={IPrinter.Format(e.NextT)}\n");
     }
 
     public void Statistics()

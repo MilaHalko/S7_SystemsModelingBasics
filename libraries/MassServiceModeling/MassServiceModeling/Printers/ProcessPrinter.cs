@@ -13,10 +13,13 @@ public class ProcessPrinter : IPrinter
 
     public void Info()
     {
-        Console.WriteLine($"{p.Name} state = {p.IsWorking} quantity = {p.Quantity} tnext= {IPrinter.Format(p.NextT)} queue = {p.Queue} failure = {p.Failure}");
-        foreach (var subProcess in p.SubProcesses)
-            subProcess.Printer.Info();
-        Console.WriteLine();
+        Console.WriteLine(
+            $"{p.Name}{IPrinter.PrintState(p.IsWorking)} queue={p.Queue} next={IPrinter.Format(p.NextT)}");
+            // $"quantity={p.Quantity} ");
+            // $"failure={p.Failure}");
+        if (p.SubProcesses.Count > 1)
+            foreach (var subProcess in p.SubProcesses)
+                subProcess.Printer.Info();
     }
 
     public void Statistics()
@@ -27,7 +30,9 @@ public class ProcessPrinter : IPrinter
         Console.WriteLine($"\tMean length of queue = {p.MeanQueue / p.CurrT}");
         Console.WriteLine($"\tFailure probability = {p.Failure / (double)p.Quantity}");
         // Console.WriteLine($"\tFinal queue = {p.Queue}");
-        foreach (var subProcess in p.SubProcesses)
-            subProcess.Printer.Statistics();
+       
+        if (p.SubProcesses.Count > 1)
+            foreach (var subProcess in p.SubProcesses)
+                subProcess.Printer.Statistics();
     }
 }

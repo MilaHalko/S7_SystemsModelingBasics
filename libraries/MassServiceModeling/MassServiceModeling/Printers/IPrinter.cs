@@ -23,8 +23,7 @@ public interface IPrinter
             element.Print.Statistics();
     }
 
-    public static void PrintCurrent(Element element)
-    {
-        Console.WriteLine($"\nNext event: {element.Name}  Time: {element.NextT} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }
+    public static void PrintCurrent(Element element) => Console.WriteLine($"\nNext event: {element.Name}  Time: {element.NextT} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    
+    public static String PrintState(bool state) => state ? "+" : "-";
 }
