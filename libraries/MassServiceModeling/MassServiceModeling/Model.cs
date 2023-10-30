@@ -9,34 +9,45 @@ public class Model
     private double _tnext, _tcurr;
     private int _event;
 
-    public Model(List<Element> elements)
+    public Model(List<Element> elements, double startTime = 0)
     {
         _elements = elements;
+        _tcurr = startTime;
+        SetStartTimeForCreateElements();
     }
 
-    public void Simulate(double time)
+    private void SetStartTimeForCreateElements()
+    {
+        foreach (var element in _elements)
+            if (element is Create create)
+                create.NextT = _tcurr;
+    }
+
+    public void Simulate(double time, double startTime = 0, bool printSteps = false, bool printTCurr = false)
     {
         int printTrigger = 0;
         while (_tcurr < time)
         {
             UpdateEventAndNextT();
-            // IPrinter.PrintCurrent(_elements[_event]);
-            foreach (var element in _elements)
-                element.DoStatistics(_tnext - _tcurr);
-            
+            if (printSteps) IPrinter.PrintCurrent(_elements[_event]);
+            DoStatisticsForAllElements();
+
             _tcurr = _tnext;
             UpgradeCurrTForAllElements();
             OutActForAllCurrentElements();
-            // IPrinter.Info(_elements);
-            if (_tcurr >= printTrigger)
+
+            if (printTCurr && _tcurr >= printTrigger)
             {
                 printTrigger += 100000;
                 Console.WriteLine($"tcurr = {_tcurr}");
             }
+            if (printSteps) IPrinter.Info(_elements);
         }
+
         IPrinter.Result(_elements);
     }
 
+    private void DoStatisticsForAllElements() => _elements.ForEach(e => e.DoStatistics(_tnext - _tcurr));
     private void UpgradeCurrTForAllElements() => _elements.ForEach(e => e.CurrT = _tcurr);
 
     private void UpdateEventAndNextT()
@@ -54,6 +65,8 @@ public class Model
 
     private void OutActForAllCurrentElements()
     {
-        foreach (var element in _elements) if (element.NextT == _tcurr) element.OutAct();
+        foreach (var element in _elements)
+            if (element.NextT == _tcurr)
+                element.OutAct();
     }
 }
