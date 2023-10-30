@@ -2,8 +2,8 @@
 
 public class ExponentialRandomizer : Randomizer
 {
-    private double TimeMean { get; set; }
-    private readonly Random _random = new Random();
+    private double TimeMean { get; }
+    private readonly Random _random = new();
 
     public ExponentialRandomizer(double timeMean)
     {
