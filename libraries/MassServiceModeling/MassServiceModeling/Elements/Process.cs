@@ -6,13 +6,15 @@ namespace MassServiceModeling.Elements;
 public class Process : Element
 {
     public int Failure { get; private set; }
-    public double MeanQueue { get; private set; }
+    public double MeanQueueAllTime { get; private set; }
     public int Queue { get; set; }
+    public double TotalTimeBetweenOutActs { get; private set; }
     public List<SubProcess> SubProcesses { get; } = new();
 
     public event Action? OnQueueChanged;
 
     private readonly int _maxQueue;
+    private double? _lastOutActTime;
     private int WorkingSubProcessesCount => SubProcesses.Count(s => s.IsWorking);
     private SubProcess FreeSubProcess => SubProcesses.First(s => !s.IsWorking);
     private List<SubProcess> BusySubProcesses => SubProcesses.Where(s => s.NextT <= CurrT && s.IsWorking).ToList();
@@ -54,6 +56,8 @@ public class Process : Element
         {
             subProcess.OutAct();
             base.OutAct();
+            TotalTimeBetweenOutActs += CurrT - _lastOutActTime ?? 0;
+            _lastOutActTime = CurrT;
             if (Queue > 0)
             {
                 IsWorking = true;
@@ -70,7 +74,7 @@ public class Process : Element
     {
         base.DoStatistics(delta);
         foreach (var subProcess in SubProcesses) subProcess.DoStatistics(delta);
-        MeanQueue += Queue * delta;
+        MeanQueueAllTime += Queue * delta;
     }
 
     protected override void UpdateNextT() => NextT = SubProcesses.Min(s => s.NextT);
