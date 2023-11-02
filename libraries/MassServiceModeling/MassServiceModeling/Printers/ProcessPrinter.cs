@@ -27,7 +27,7 @@ public class ProcessPrinter : IPrinter
         Console.WriteLine($"{p.Name}:");
         Console.WriteLine($"\tQuantity = {p.Quantity}");
         Console.WriteLine($"\tWorkTime = {p.WorkTime / p.CurrT}");
-        Console.WriteLine($"\tMean length of queue = {p.MeanQueue / p.CurrT}");
+        Console.WriteLine($"\tMean length of queue = {p.MeanQueueAllTime / p.CurrT}");
         Console.WriteLine($"\tFailure probability = {p.Failure / (double)p.Quantity}");
         // Console.WriteLine($"\tFinal queue = {p.Queue}");
        
