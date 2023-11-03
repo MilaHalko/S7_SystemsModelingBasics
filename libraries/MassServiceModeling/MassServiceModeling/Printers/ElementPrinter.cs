@@ -13,14 +13,14 @@ public class ElementPrinter : IPrinter
 
     public void Info()
     {
-        Console.WriteLine($"{e.Name} state={IPrinter.PrintState(e.IsWorking)} quantity={e.Quantity} tnext={IPrinter.Format(e.NextT)}\n");
+        Console.WriteLine($"{e.Name} state={IPrinter.PrintState(e.IsWorking)} quantity={e.InActQuantity} tnext={IPrinter.Format(e.NextT)}\n");
     }
 
     public void Statistics()
     {
         Console.Out.WriteLine($"{e.Name}:");
-        Console.WriteLine($"\tQuantity = {e.Quantity}");
-        Console.WriteLine($"\tQuantity processed = {e.QuantityProcessed}");
+        Console.WriteLine($"\tQuantity = {e.InActQuantity}");
+        Console.WriteLine($"\tQuantity processed = {e.OutActQuantity}");
         Console.WriteLine($"\tWorkTime = {e.WorkTime}");
     }
 }
