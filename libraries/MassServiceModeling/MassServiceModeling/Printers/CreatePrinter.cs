@@ -13,13 +13,15 @@ public class CreatePrinter : IPrinter
 
     public void Info()
     {
-        Console.WriteLine($"{c.Name} created={c.QuantityProcessed} ");
-        // $"tnext={IPrinter.Format(c.NextT)}\n");
+        Console.Write($"  {c.Name} created={c.OutActQuantity}  " +
+                      $"delay={IPrinter.Format(c.Delay)}  " +
+                      $"tnext={IPrinter.Format(c.NextT)  }");
+        Console.WriteLine();
     }
-    
+
     public void Statistics()
     {
         Console.WriteLine($"{c.Name}:");
-        Console.WriteLine($"\tQuantity = {c.QuantityProcessed}");
+        Console.WriteLine($"\tQuantity = {c.OutActQuantity}");
     }
 }
