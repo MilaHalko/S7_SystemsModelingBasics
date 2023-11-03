@@ -2,6 +2,8 @@
 
 public abstract class Randomizer
 {
+    protected readonly Random _random = new Random();
+
     public abstract double GenerateDelay();
 
     public List<double> GenerateListOfDelays(int size)
