@@ -2,7 +2,6 @@
 
 public class NormalRandomizer : Randomizer
 {
-    private readonly Random _random = new Random();
     private double TimeMean { get; } // dispersion
     private double TimeDeviation { get; } // mathematical expectation
 
