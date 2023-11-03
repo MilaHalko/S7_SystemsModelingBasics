@@ -10,8 +10,8 @@ public class NextElementsContainerByProbability : NextElementsContainer
 
     protected override Element GetNextElement()
     {
-        double sum = NextElements.Sum(nextElement => nextElement.Probability);
-        double random = new Random().NextDouble() * sum;
+        var sum = NextElements.Sum(nextElement => nextElement.Probability);
+        var random = new Random().NextDouble() * sum;
         double current = 0;
         foreach (var nextElement in NextElements)
         {
