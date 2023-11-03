@@ -2,16 +2,16 @@
 using MassServiceModeling.Elements;
 using MassServiceModeling.NextElement;
 
-namespace Lab3.Tasks;
+namespace Lab3.Tasks.Task1;
 
 public class Task1
 {
     public Model Model;
-    
-    Create _create = new Create(1);
-    Process _process1 = new Process(1, 2, maxQueue: 5);
-    Process _process2 = new Process(2, 3, maxQueue: 5);
-    Process _process3 = new Process(1, 4, maxQueue: 5);
+
+    private Create _create = new();
+    private Process _process1 = new(5, 2, maxQueue: 5);
+    private Process _process2 = new(7, 3, maxQueue: 5);
+    private Process _process3 = new(10, 4, maxQueue: 5);
     
     public Task1()
     {
@@ -21,6 +21,6 @@ public class Task1
         container.AddNextElement(_process3, 10);
         _create.NextElementsContainer = container;
         
-        Model = new(new List<Element>() { _create, _process1, _process2, _process3 });
+        Model = new Model(new List<Element> { _create, _process1, _process2, _process3 });
     }
 }
