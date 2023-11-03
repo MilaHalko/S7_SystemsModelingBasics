@@ -6,50 +6,87 @@ namespace MassServiceModeling.Elements;
 
 public abstract class Element
 {
-    public double NextT { get; set; }
-    public double CurrT { get; set; }
-    public int Quantity { get; private set; }
-    public int QuantityProcessed { get; private set; }
+    // Statistics
     public double WorkTime { get; private set; }
-    public bool IsWorking { protected set; get; }
-    public IPrinter Print { get; protected init; }
+
+    // Statistics: InAct && OutAct statistics 
+    public int InActQuantity { get; private set; }
+    public int OutActQuantity { get; private set; }
+    public double TotalTimeBetweenInActs { get; private set; }
+    public double TotalTimeBetweenOutActs { get; private set; }
+    private double? _lastInActTime;
+    private double? _lastOutActTime;
+    
+    // Non-static attributes
+    public double CurrT { get; set; }
+    public double NextT { get; set; }
+    public Item? Item { get; protected set; }
+    public bool IsWorking { get; protected set; }
+    public double Delay { get; private set; }
+
+    // Static attributes
     public NextElementsContainer? NextElementsContainer;
+    public Model? Model { get; set; }
+    public IPrinter Print { get; protected init; }
+    public Randomizer Randomizer { get; }
 
-
-    public readonly string Name;
-    protected readonly int Id = _nextId;
+    // Self-static
+    public string Name { get; }
     private static int _nextId;
-    private Randomizer _randomizer;
+    public int Id { get; } = _nextId++;
 
     protected Element(Randomizer randomizer, string name)
     {
-        _randomizer = randomizer;
-        Name += $"{name}_{Id}";
-        _nextId++;
+        Name = name == "" ? $"{GetElementName()}_{Id}" : name;
         Print = new ElementPrinter(this);
-    } 
-
-    public virtual void InAct()
-    {
-        Quantity++;
-        IsWorking = true;
+        Randomizer = randomizer;
     }
 
+    public virtual void InAct(Item item)
+    {
+        IsWorking = true;
+        DoInActsStatistics();
+        SetItem(item);
+    }
+    
     public virtual void OutAct()
     {
-        QuantityProcessed++;
         IsWorking = false;
-        NextElementsContainer?.InAct();
+        DoOutActsStatistics();
+        NextElementsContainer?.InAct(Item ?? throw new InvalidOperationException());
+        Item = null;
         UpdateNextT();
     }
-
+    
     public virtual void DoStatistics(double delta)
     {
         WorkTime += IsWorking ? delta : 0;
     }
 
+    protected virtual double GetDelay() => Delay = Randomizer.GenerateDelay();
 
-    protected double GetDelay() => _randomizer.GenerateDelay();
+    private void DoInActsStatistics()
+    {
+        InActQuantity++;
+        TotalTimeBetweenInActs += CurrT - _lastInActTime ?? 0;
+        _lastInActTime = CurrT;
+    }
+
+    private void DoOutActsStatistics()
+    {
+        OutActQuantity++;
+        
+        if (Item is null) throw new InvalidOperationException();
+        IPrinter.CurrentItem = Item;
+        Model!.AddItemTimeInSystem(CurrT - Item.StartTime);
+        
+        TotalTimeBetweenOutActs += CurrT - _lastOutActTime ?? 0;
+        _lastOutActTime = CurrT;
+    }
 
     protected abstract void UpdateNextT();
+
+    protected abstract void SetItem(Item item);
+
+    protected abstract string GetElementName();
 }
