@@ -1,10 +1,12 @@
 ﻿using MassServiceModeling.Elements;
+using MassServiceModeling.Items;
 
 namespace MassServiceModeling.Printers;
 
 public interface IPrinter
 {
     public static Item? CurrentItem { get; set; }
+    protected static string GetItemName(Item item) => item.Name == "" ? $"Item_{item.Id}" : $"{item.Name}_{item.Id}";
     public void Statistics();
     public void Info();
 
@@ -37,9 +39,9 @@ public interface IPrinter
         Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.ResetColor();
         Console.Write($"Event: {element.Name}  " +
-                      $"StartTime: {Format(element.CurrT)}  " +
-                      $"Delay: {Format(element.Delay)}  " +
-                      $"CurrentTime: {Format(element.NextT)}  " +
+                      $"StartTime: {Format(element.Time.Curr)}  " +
+                      $"Delay: {Format(element.Time.Delay)}  " +
+                      $"CurrentTime: {Format(element.Time.Next)}  " +
                       $"Item: {CurrentItem!.Name}_{CurrentItem.Id}  ");
         Console.WriteLine();
     }
