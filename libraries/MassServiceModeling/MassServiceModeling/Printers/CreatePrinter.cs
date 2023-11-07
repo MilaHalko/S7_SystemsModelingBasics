@@ -8,10 +8,7 @@ public class CreatePrinter : IPrinter
     private Create c;
     private CreateStatisticHelper s => c.StatisticHelper;
 
-    public CreatePrinter(Create create)
-    {
-        c = create;
-    }
+    public CreatePrinter(Create create) => c = create;
 
     public void Info()
     {

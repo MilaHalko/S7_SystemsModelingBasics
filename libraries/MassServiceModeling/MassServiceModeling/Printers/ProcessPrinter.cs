@@ -8,17 +8,14 @@ public class ProcessPrinter : IPrinter
     private Process p;
     private ProcessStatisticHelper s => p.StatisticHelper;
 
-    public ProcessPrinter(Process process)
-    {
-        p = process;
-    }
+    public ProcessPrinter(Process process) => p = process;
 
     public void Info()
     {
         Console.Write($"{IPrinter.PrintState(p.IsWorking)}{p.Name}  tnext={IPrinter.Format(p.Time.Next)}");
         if (p.Queue.Length > 0) Console.Write($"  queue={p.Queue.Length}");
         if (s.Failure > 0) Console.Write($"  failure={s.Failure}");
-        if (p.SubProcesses.Count >= 10 && p.SubProcesses.WorkingCount > 0) Console.WriteLine($"  workingSubProcesses count = {p.SubProcesses.WorkingCount}");
+        if (p.SubProcesses is { Count: >= 10, WorkingCount: > 0 }) Console.WriteLine($"  workingSubProcesses count = {p.SubProcesses.WorkingCount}");
         Console.WriteLine();
         
         if (p.SubProcesses.Count is > 1 and < 10)

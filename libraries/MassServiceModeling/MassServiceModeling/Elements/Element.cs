@@ -3,6 +3,7 @@ using MassServiceModeling.Items;
 using MassServiceModeling.NextElement;
 using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.Elements;
 
@@ -13,7 +14,7 @@ public abstract class Element
     public Item? Item { get; protected set; }
 
     // Static attributes
-    public Time.Time Time = new();
+    public Time Time = new();
     public NextElementsContainer? NextElementsContainer;
     public Model? Model { get; set; }
     public ElementStatisticHelper StatisticHelper;

@@ -1,4 +1,4 @@
-﻿namespace MassServiceModeling.Time;
+﻿namespace MassServiceModeling.TimeClasses;
 
 public class Time
 {

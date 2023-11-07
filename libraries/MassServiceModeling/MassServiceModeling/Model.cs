@@ -1,7 +1,7 @@
 ﻿using MassServiceModeling.Elements;
 using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
-using MassServiceModeling.Time;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling;
 
@@ -13,7 +13,7 @@ public class Model
     protected readonly List<Element> Elements;
 
     public ModelStatisticHelper StatisticHelper;
-    public Time.Time Time = new();
+    public Time Time = new();
 
     public event Action? OnNextElementStarted;
     protected bool InitialStateAccessed { get; }

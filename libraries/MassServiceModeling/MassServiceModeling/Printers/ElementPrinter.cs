@@ -8,10 +8,7 @@ public class ElementPrinter : IPrinter
     private Element e;
     private ElementStatisticHelper s => e.StatisticHelper;
 
-    public ElementPrinter(Element element)
-    {
-        e = element;
-    }
+    public ElementPrinter(Element element) => e = element;
 
     public void Info()
     {
