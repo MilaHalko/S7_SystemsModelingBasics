@@ -27,7 +27,7 @@ public class Create : Element
 
     protected override void SetItem(Item item) => Item = item;
 
-    protected override string GetElementName() => "CREATE";
+    protected override string GetElementDefaultName() => "CREATE";
 
     protected override void UpdateNextT() => Time.Next = Time.Curr + GetDelay();
 }
