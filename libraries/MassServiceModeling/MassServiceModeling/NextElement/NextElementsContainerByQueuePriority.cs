@@ -14,10 +14,10 @@ public class NextElementsContainerByQueuePriority : NextElementsContainer
 
     private Dictionary<Process, int> GetElementsWithMinQueueLength()
     {
-        var minQueueLength = _nextElements.Min(e => e.Key.QueueLength);
+        var minQueueLength = _nextElements.Min(e => e.Key.Queue.Length);
         var nextElementsWithMinQueueLength = new Dictionary<Process, int>();
         foreach (var (process, priority) in _nextElements)
-            if (process.QueueLength == minQueueLength)
+            if (process.Queue.Length == minQueueLength)
                 nextElementsWithMinQueueLength.Add(process, priority);
         return nextElementsWithMinQueueLength;
     }
