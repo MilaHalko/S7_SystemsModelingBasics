@@ -10,7 +10,7 @@ public class SubProcess
 {
     // Dynamic attributes
     public Item? Item { private set; get; }
-    public TimeHelper Time = new();
+    public Time.Time Time = new();
     public bool IsWorking { get; private set; }
 
     // Static attributes

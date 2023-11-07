@@ -13,7 +13,7 @@ public abstract class Element
     public Item? Item { get; protected set; }
 
     // Static attributes
-    public Time.TimeHelper Time = new();
+    public Time.Time Time = new();
     public NextElementsContainer? NextElementsContainer;
     public Model? Model { get; set; }
     public ElementStatisticHelper StatisticHelper;

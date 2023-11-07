@@ -11,12 +11,12 @@ public class Process : Element
     public event Action? OnQueueChanged;
     public new ProcessStatisticHelper StatisticHelper;
     public ItemsQueue Queue;
-    public SubProcessesHelper SubProcesses;
+    public SubProcessesContainer SubProcesses;
 
     public Process(Randomizer randomizer, int subProcessCount = 1, string name = "", int maxQueue = int.MaxValue, String subProcessName = "") 
         : base(randomizer, name)
     {
-        SubProcesses = new SubProcessesHelper(this);
+        SubProcesses = new SubProcessesContainer(this);
         for (int i = 0; i < subProcessCount; i++) SubProcesses.Add(new SubProcess(this, i, subProcessName));
         Queue = new ItemsQueue(maxQueue);
         Time.Next = double.MaxValue;

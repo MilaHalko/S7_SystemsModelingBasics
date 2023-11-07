@@ -13,7 +13,7 @@ public class Model
     protected readonly List<Element> Elements;
 
     public ModelStatisticHelper StatisticHelper;
-    public TimeHelper Time = new();
+    public Time.Time Time = new();
 
     public event Action? OnNextElementStarted;
     protected bool InitialStateAccessed { get; }

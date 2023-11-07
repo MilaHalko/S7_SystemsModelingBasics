@@ -1,6 +1,6 @@
 ﻿namespace MassServiceModeling.Time;
 
-public class TimeHelper
+public class Time
 {
     public double All => Curr - Start;
     public double Delta => Next - Curr;
