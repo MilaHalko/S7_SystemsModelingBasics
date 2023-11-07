@@ -1,8 +1,7 @@
 ﻿using DistributionRandomizer.DelayRandomizers;
 using Lab3.Tasks.Task3.Clients;
-using MassServiceModeling;
 using MassServiceModeling.Elements;
-using MassServiceModeling.ItemsQueues;
+using MassServiceModeling.Items;
 using MassServiceModeling.NextElement;
 
 namespace Lab3.Tasks.Task3.Elements;

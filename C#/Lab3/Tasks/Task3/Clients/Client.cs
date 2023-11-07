@@ -1,4 +1,4 @@
-﻿using MassServiceModeling;
+﻿using MassServiceModeling.Items;
 
 namespace Lab3.Tasks.Task3.Clients;
 

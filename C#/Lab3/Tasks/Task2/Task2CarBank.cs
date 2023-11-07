@@ -1,6 +1,6 @@
 ﻿using DistributionRandomizer.DelayRandomizers;
-using MassServiceModeling;
 using MassServiceModeling.Elements;
+using MassServiceModeling.Items;
 using MassServiceModeling.NextElement;
 
 namespace Lab3.Tasks.Task2;
@@ -27,7 +27,7 @@ public class Task2CarBank
 
         // Initial states condition
         const double startTime = 0.1;
-        _cars.NextT = startTime;
+        _cars.Time.Next = startTime;
         for (var i = 0; i < 3; i++)
         {
             _cashier1.InAct(new Item(startTime));
@@ -39,9 +39,9 @@ public class Task2CarBank
 
     private void ChangeQueueIfNecessary()
     {
-        if (Math.Abs(_cashier1.QueueLength - _cashier2.QueueLength) < 2) return;
-        Console.WriteLine($"\nCHANGE_QUEUE: Q1={_cashier1.QueueLength} Q2={_cashier2.QueueLength}!*!*!*!*!");
-        if (_cashier1.QueueLength > _cashier2.QueueLength)
+        if (Math.Abs(_cashier1.Queue.Length - _cashier2.Queue.Length) < 2) return;
+        Console.WriteLine($"\nCHANGE_QUEUE: Q1={_cashier1.Queue.Length} Q2={_cashier2.Queue.Length}!*!*!*!*!");
+        if (_cashier1.Queue.Length > _cashier2.Queue.Length)
         {
             Process.TryChangeQueueForLastItem(_cashier1, _cashier2);
             Console.WriteLine("CASHIER1 -> CASHIER2");

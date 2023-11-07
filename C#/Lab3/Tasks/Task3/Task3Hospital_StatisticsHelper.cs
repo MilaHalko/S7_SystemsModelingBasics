@@ -11,13 +11,13 @@ public class Task3HospitalModel : Model
     {
         base.Simulate(time, startTime, printSteps);
         Console.WriteLine();
-        Console.WriteLine($"1) Average spent time in system: {AverageItemTimeInSystem}");
+        Console.WriteLine($"1) Average spent time in system: {StatisticHelper.AverageItemTimeInSystem}");
         Console.WriteLine($"2) Average time between arrivals in registry: {AverageBetweenInActs_2()}");
     }
 
     private double AverageBetweenInActs_2()
     {
         var lab = Elements.OfType<Process>().First(p => p.Name == "Registry");
-        return lab.TotalTimeBetweenInActs / lab.InActQuantity;
+        return lab.StatisticHelper.TotalTimeBetweenInActs / lab.StatisticHelper.InActQuantity;
     }
 }
