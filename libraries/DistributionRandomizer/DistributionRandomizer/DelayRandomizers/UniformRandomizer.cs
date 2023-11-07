@@ -2,8 +2,8 @@
 
 public class UniformRandomizer : Randomizer
 {
-    private double TimeMin { get; set; }
-    private double TimeMax { get; set; }
+    private double TimeMin { get; }
+    private double TimeMax { get; }
 
     public UniformRandomizer(double timeMin, double timeMax)
     {

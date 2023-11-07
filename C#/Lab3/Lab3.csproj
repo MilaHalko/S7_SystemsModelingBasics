@@ -7,4 +7,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="DistributionRandomizer">
+        <HintPath>..\..\libraries\DistributionRandomizer\DistributionRandomizer\obj\Debug\net7.0\DistributionRandomizer.dll</HintPath>
+      </Reference>
+      <Reference Include="MassServiceModeling">
+        <HintPath>..\..\libraries\MassServiceModeling\MassServiceModeling\obj\Debug\net7.0\MassServiceModeling.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

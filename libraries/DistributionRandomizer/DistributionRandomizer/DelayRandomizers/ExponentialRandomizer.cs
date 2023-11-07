@@ -2,8 +2,7 @@
 
 public class ExponentialRandomizer : Randomizer
 {
-    private double TimeMean { get; set; }
-    private readonly Random _random = new Random();
+    private double TimeMean { get; }
 
     public ExponentialRandomizer(double timeMean)
     {
@@ -11,4 +10,6 @@ public class ExponentialRandomizer : Randomizer
     }
 
     public override double GenerateDelay() => -TimeMean * Math.Log(_random.NextDouble());
+    
+    public static double GenerateDelay(double timeMean) => -timeMean * Math.Log(new Random().NextDouble());
 }
