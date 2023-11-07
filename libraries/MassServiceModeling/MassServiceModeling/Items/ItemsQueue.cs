@@ -1,4 +1,4 @@
-﻿namespace MassServiceModeling.ItemsQueues;
+﻿namespace MassServiceModeling.Items;
 
 public class ItemsQueue
 {

@@ -1,4 +1,4 @@
-﻿namespace MassServiceModeling;
+﻿namespace MassServiceModeling.Items;
 
 public class Item
 {
