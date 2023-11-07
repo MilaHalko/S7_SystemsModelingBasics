@@ -16,9 +16,9 @@ public class Task1
     public Task1()
     {
         var container = new NextElementsContainerByProbability();
-        container.AddNextElement(_process1, 40);
-        container.AddNextElement(_process2, 50);
-        container.AddNextElement(_process3, 10);
+        container.AddNextElement(_process1, 35);
+        container.AddNextElement(_process2, 45);
+        container.AddNextElement(_process3, 20);
         _create.NextElementsContainer = container;
         
         Model = new Model(new List<Element> { _create, _process1, _process2, _process3 });
