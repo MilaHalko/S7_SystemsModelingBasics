@@ -1,4 +1,6 @@
 ﻿using MassServiceModeling.Elements;
+using MassServiceModeling.Items;
+
 namespace MassServiceModeling.NextElement;
 
 public class NextElement
