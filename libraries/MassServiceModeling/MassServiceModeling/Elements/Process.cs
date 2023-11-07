@@ -88,6 +88,6 @@ public class Process : Element
     }
     
     protected override void UpdateNextT() => Time.Next = SubProcesses.All.Min(s => s.Time.Next);
-    protected override string GetElementName() => "PROCESS";
+    protected override string GetElementDefaultName() => "PROCESS";
     protected virtual void NextElementsContainerSetup() {}
 }

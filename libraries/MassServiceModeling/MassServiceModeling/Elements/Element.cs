@@ -27,7 +27,7 @@ public abstract class Element
 
     protected Element(Randomizer randomizer, string name)
     {
-        Name = name == "" ? $"{GetElementName()}_{Id}" : name;
+        Name = name == "" ? $"{GetElementDefaultName()}_{Id}" : name;
         StatisticHelper = new ElementStatisticHelper(this);
         Print = new ElementPrinter(this);
         Randomizer = randomizer;
@@ -70,5 +70,5 @@ public abstract class Element
 
     protected abstract void SetItem(Item item);
 
-    protected abstract string GetElementName();
+    protected abstract string GetElementDefaultName();
 }
