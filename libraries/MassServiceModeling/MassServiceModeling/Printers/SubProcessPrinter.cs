@@ -1,37 +1,41 @@
 ﻿using MassServiceModeling.Elements;
+using MassServiceModeling.Statistics;
+using MassServiceModeling.SubProcesses;
 
 namespace MassServiceModeling.Printers;
 
 public class SubProcessPrinter : IPrinter
 {
-    private SubProcess s;
+    private SubProcess sp;
+    private SubProcessStatisticHelper s;
 
     public SubProcessPrinter(SubProcess subProcess)
     {
-        s = subProcess;
+        sp = subProcess;
+        s = subProcess.StatisticHelper;
     }
 
     public void Statistics()
     {
-        Console.Out.WriteLine($"\t{s.Name}:");
+        Console.Out.WriteLine($"\t{sp.Name}:");
         Console.WriteLine($"\t\tQuantity = {s.Quantity}");
-        Console.WriteLine($"\t\tWorkTime = {IPrinter.Format(s.WorkTime)}");
+        Console.WriteLine($"\t\tWorkTime = {IPrinter.Format(s.WorkTime / sp.Process.Time.Curr)}");
     }
 
     public void Info()
     {
-        if (s.IsWorking)
+        if (sp.IsWorking)
         {
-            Console.Write($"\t{IPrinter.PrintState(s.IsWorking)}{s.Name}\t " +
-                              $"quantity={s.Quantity}  " +
-                              $"delay={IPrinter.Format(s.Delay)}  " +
-                              $"tnext={IPrinter.Format(s.NextT)}  ");
-            if(s.Item!.Name != "") Console.Write($"item={s.Item.Name}_{s.Item.Id}  ");
+            Console.Write($"\t{IPrinter.PrintState(sp.IsWorking)}{sp.Name}\t " +
+                          $"quantity={s.Quantity}  " +
+                          $"delay={IPrinter.Format(sp.Time.Delay)}  " +
+                          $"tnext={IPrinter.Format(sp.Time.Next)}  " +
+                          $"{IPrinter.GetItemName(sp.Item!)}  ");
             Console.WriteLine();
         }
         else
         {
-            Console.WriteLine($"\t{IPrinter.PrintState(s.IsWorking)}{s.Name}\t " +
+            Console.WriteLine($"\t{IPrinter.PrintState(sp.IsWorking)}{sp.Name}\t " +
                               $"quantity={s.Quantity} ");
         }
     }
