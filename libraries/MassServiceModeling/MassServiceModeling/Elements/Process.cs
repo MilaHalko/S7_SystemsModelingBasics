@@ -17,7 +17,7 @@ public class Process : Element
         : base(randomizer, name)
     {
         SubProcesses = new SubProcessesContainer(this);
-        for (int i = 0; i < subProcessCount; i++) SubProcesses.Add(new SubProcess(this, i, subProcessName));
+        for (int i = 0; i < subProcessCount; i++) SubProcesses.Add(new SubProcess(Time, i, subProcessName));
         Queue = new ItemsQueue(maxQueue);
         Time.Next = double.MaxValue;
         StatisticHelper = new ProcessStatisticHelper(this);

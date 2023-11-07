@@ -1,5 +1,4 @@
-﻿using MassServiceModeling.Elements;
-using MassServiceModeling.Statistics;
+﻿using MassServiceModeling.Statistics;
 using MassServiceModeling.SubProcesses;
 
 namespace MassServiceModeling.Printers;
@@ -19,7 +18,7 @@ public class SubProcessPrinter : IPrinter
     {
         Console.Out.WriteLine($"\t{sp.Name}:");
         Console.WriteLine($"\t\tQuantity = {s.Quantity}");
-        Console.WriteLine($"\t\tWorkTime = {IPrinter.Format(s.WorkTime / sp.Process.Time.Curr)}");
+        Console.WriteLine($"\t\tWorkTime = {IPrinter.Format(s.WorkTime / sp.ProcessTime.Curr)}");
     }
 
     public void Info()

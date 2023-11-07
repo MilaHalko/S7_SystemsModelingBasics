@@ -1,8 +1,7 @@
-﻿using MassServiceModeling.Elements;
-using MassServiceModeling.Items;
+﻿using MassServiceModeling.Items;
 using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
-using MassServiceModeling.Time;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.SubProcesses;
 
@@ -10,18 +9,18 @@ public class SubProcess
 {
     // Dynamic attributes
     public Item? Item { private set; get; }
-    public Time.Time Time = new();
     public bool IsWorking { get; private set; }
 
     // Static attributes
     public string Name { get; }
-    public Process Process { get; }
+    public Time Time = new();
+    public Time ProcessTime { get; }
     public SubProcessStatisticHelper StatisticHelper;
     public SubProcessPrinter Printer { get; private init; }
     
-    public SubProcess(Process process, int subProcessId, string name)
+    public SubProcess(Time processTime, int subProcessId, string name)
     {
-        Process = process;
+        ProcessTime = processTime;
         Name = name == "" ? "SubProcess" : name;
         Name = $"{Name}_{subProcessId}";
         StatisticHelper = new SubProcessStatisticHelper(this);
@@ -33,7 +32,7 @@ public class SubProcess
         IsWorking = true;
         StatisticHelper.Quantity++;
         Time.Next = nextT;
-        Time.Delay = nextT - Process.Time.Curr;
+        Time.Delay = nextT - ProcessTime.Curr;
         Item = item;
     }
 
