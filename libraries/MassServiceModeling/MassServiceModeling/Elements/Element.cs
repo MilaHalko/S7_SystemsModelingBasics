@@ -1,32 +1,22 @@
 ﻿using DistributionRandomizer.DelayRandomizers;
+using MassServiceModeling.Items;
 using MassServiceModeling.NextElement;
 using MassServiceModeling.Printers;
+using MassServiceModeling.Statistics;
 
 namespace MassServiceModeling.Elements;
 
 public abstract class Element
 {
-    // Statistics
-    public double WorkTime { get; private set; }
-
-    // Statistics: InAct && OutAct statistics 
-    public int InActQuantity { get; private set; }
-    public int OutActQuantity { get; private set; }
-    public double TotalTimeBetweenInActs { get; private set; }
-    public double TotalTimeBetweenOutActs { get; private set; }
-    private double? _lastInActTime;
-    private double? _lastOutActTime;
-    
     // Non-static attributes
-    public double CurrT { get; set; }
-    public double NextT { get; set; }
-    public Item? Item { get; protected set; }
     public bool IsWorking { get; protected set; }
-    public double Delay { get; private set; }
+    public Item? Item { get; protected set; }
 
     // Static attributes
+    public Time.TimeHelper Time = new();
     public NextElementsContainer? NextElementsContainer;
     public Model? Model { get; set; }
+    public ElementStatisticHelper StatisticHelper;
     public IPrinter Print { get; protected init; }
     public Randomizer Randomizer { get; }
 
@@ -38,6 +28,7 @@ public abstract class Element
     protected Element(Randomizer randomizer, string name)
     {
         Name = name == "" ? $"{GetElementName()}_{Id}" : name;
+        StatisticHelper = new ElementStatisticHelper(this);
         Print = new ElementPrinter(this);
         Randomizer = randomizer;
     }
@@ -58,30 +49,21 @@ public abstract class Element
         UpdateNextT();
     }
     
-    public virtual void DoStatistics(double delta)
-    {
-        WorkTime += IsWorking ? delta : 0;
-    }
+    public virtual void DoStatistics(double delta) => StatisticHelper.WorkTime += IsWorking ? delta : 0;
 
-    protected virtual double GetDelay() => Delay = Randomizer.GenerateDelay();
+    protected virtual double GetDelay() => Time.Delay = Randomizer.GenerateDelay();
 
-    private void DoInActsStatistics()
-    {
-        InActQuantity++;
-        TotalTimeBetweenInActs += CurrT - _lastInActTime ?? 0;
-        _lastInActTime = CurrT;
-    }
+    private void DoInActsStatistics() => StatisticHelper.InAct();
 
     private void DoOutActsStatistics()
     {
-        OutActQuantity++;
+        StatisticHelper.OutActQuantity++;
         
         if (Item is null) throw new InvalidOperationException();
         IPrinter.CurrentItem = Item;
-        Model!.AddItemTimeInSystem(CurrT - Item.StartTime);
-        
-        TotalTimeBetweenOutActs += CurrT - _lastOutActTime ?? 0;
-        _lastOutActTime = CurrT;
+        Model!.AddItemTimeInSystem(Time.Curr - Item.StartTime);
+
+        StatisticHelper.OutAct();
     }
 
     protected abstract void UpdateNextT();

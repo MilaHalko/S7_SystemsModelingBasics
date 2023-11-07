@@ -1,5 +1,7 @@
 ﻿using MassServiceModeling.Elements;
 using MassServiceModeling.Printers;
+using MassServiceModeling.Statistics;
+using MassServiceModeling.Time;
 
 namespace MassServiceModeling;
 
@@ -10,23 +12,8 @@ public class Model
     public List<Process> Processes => Elements.OfType<Process>().ToList();
     protected readonly List<Element> Elements;
 
-    // Quantity and Percent
-    public int Quantity => Creates.Sum(e => e.OutActQuantity);
-    public int FailureQuantity => Processes.Sum(e => e.Failure);
-    public double FailurePercent => (double)FailureQuantity / Quantity * 100;
-    public double AverageItemsCount => AverageItemsCountAllTime / AllTime;
-    protected double AverageItemsCountAllTime;
-
-    // Items time in system
-    public double AverageItemTimeInSystem => AllFinishedItemsTimeInSystem / FinishedItemsCount;
-    public int FinishedItemsCount { get; private set; }
-    public double AllFinishedItemsTimeInSystem { get; private set; }
-
-    // Time attributes
-    protected double NextT, CurrT;
-    protected double Delta => NextT - CurrT;
-    protected double AllTime => CurrT - _startTime;
-    private double _startTime;
+    public ModelStatisticHelper StatisticHelper;
+    public TimeHelper Time = new();
 
     public event Action? OnNextElementStarted;
     protected bool InitialStateAccessed { get; }
@@ -35,14 +22,15 @@ public class Model
     public Model(List<Element> elements, bool initialStateIsNeeded = false)
     {
         Elements = elements;
+        StatisticHelper = new ModelStatisticHelper(this);
         InitialStateAccessed = !initialStateIsNeeded;
         Elements.ForEach(e => e.Model = this);
     }
 
     public virtual void Simulate(double time, double startTime = 0, bool printSteps = false)
     {
-        _startTime = startTime;
-        while (CurrT < time)
+        Time.Start = startTime;
+        while (Time.Curr < time)
         {
             DefineNextEvent();
             if (InitialStateAccessed) DoStatistics();
@@ -61,36 +49,36 @@ public class Model
 
     protected virtual void DoStatistics()
     {
-        Elements.ForEach(e => e.DoStatistics(Delta));
-        AverageItemsCountAllTime += Processes.Sum(p => p.IsWorking ? p.QueueLength + 1 : 0) * Delta;
+        Elements.ForEach(e => e.DoStatistics(Time.Delta));
+        StatisticHelper.AverageItemsCountAllTime += Processes.Sum(p => p.IsWorking ? p.Queue.Length + 1 : 0) * Time.Delta;
     }
 
     public void AddItemTimeInSystem(double timeInSystem)
     {
-        FinishedItemsCount++;
-        AllFinishedItemsTimeInSystem += timeInSystem;
+        StatisticHelper.FinishedItemsCount++;
+        StatisticHelper.AllFinishedItemsTimeInSystem += timeInSystem;
     }
 
     private void ShiftTime()
     {
-        CurrT = NextT;
-        Elements.ForEach(e => e.CurrT = CurrT);
+        Time.ShiftTime();
+        Elements.ForEach(e => e.Time.Curr = Time.Curr);
     }
 
     private void DefineNextEvent()
     {
-        NextT = double.MaxValue;
+        Time.Next = double.MaxValue;
         for (var i = 0; i < Elements.Count; i++)
         {
-            if (!(Elements[i].NextT < NextT)) continue;
-            NextT = Elements[i].NextT;
+            if (!(Elements[i].Time.Next < Time.Next)) continue;
+            Time.Next = Elements[i].Time.Next;
             _event = i;
         }
     }
 
     private void OutActForFinished()
     {
-        foreach (var element in Elements.Where(element => element.NextT == CurrT))
+        foreach (var element in Elements.Where(element => element.Time.Next == Time.Curr))
             element.OutAct();
     }
 }
