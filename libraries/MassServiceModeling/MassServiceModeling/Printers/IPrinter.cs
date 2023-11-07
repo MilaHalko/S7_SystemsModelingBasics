@@ -1,5 +1,6 @@
 ﻿using MassServiceModeling.Elements;
 using MassServiceModeling.Items;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.Printers;
 
@@ -39,9 +40,9 @@ public interface IPrinter
         Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         Console.ResetColor();
         Console.Write($"Event: {element.Name}  " +
-                      $"StartTime: {Format(element.Time.Curr)}  " +
-                      $"Delay: {Format(element.Time.Delay)}  " +
-                      $"CurrentTime: {Format(element.Time.Next)}  " +
+                      $"StartTime: {Format(Time.Curr)}  " +
+                      $"Delay: {Format(element.Delay)}  " +
+                      $"CurrentTime: {Format(element.NextT)}  " +
                       $"Item: {CurrentItem!.Name}_{CurrentItem.Id}  ");
         Console.WriteLine();
     }

@@ -18,6 +18,6 @@ public class Task3HospitalModel : Model
     private double AverageBetweenInActs_2()
     {
         var lab = Elements.OfType<Process>().First(p => p.Name == "Registry");
-        return lab.StatisticHelper.TotalTimeBetweenInActs / lab.StatisticHelper.InActQuantity;
+        return lab.BaseStatistic.TotalTimeBetweenInActs / lab.BaseStatistic.InActQuantity;
     }
 }

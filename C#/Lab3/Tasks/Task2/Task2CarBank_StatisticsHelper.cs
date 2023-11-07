@@ -1,5 +1,6 @@
 ﻿using MassServiceModeling;
 using MassServiceModeling.Elements;
+using MassServiceModeling.TimeClasses;
 
 namespace Lab3.Tasks.Task2;
 
@@ -21,7 +22,7 @@ public class Task2Model : Model
         Console.WriteLine($"7) Queue change count: {QueueChangeCount7}");
     }
 
-    private void PrintEachProcessWorkTime_1() => Processes.ForEach(p => Console.WriteLine($"\t{p.Name}: {p.StatisticHelper.WorkTime / Time.All}"));
-    private double AverageBetweenOutActs3 => Processes.Sum(p => p.StatisticHelper.TotalTimeBetweenOutActs / p.StatisticHelper.OutActQuantity) / Processes.Count;
-    private void PrintEachProcessMeanQueue_5() => Processes.ForEach(p => Console.WriteLine($"\t{p.Name}: {p.StatisticHelper.MeanQueueAllTime / Time.All}"));
+    private void PrintEachProcessWorkTime_1() => Processes.ForEach(p => Console.WriteLine($"\t{p.Name}: {p.BaseStatistic.WorkTime / Time.All}"));
+    private double AverageBetweenOutActs3 => Processes.Sum(p => p.BaseStatistic.TotalTimeBetweenOutActs / p.BaseStatistic.OutActQuantity) / Processes.Count;
+    private void PrintEachProcessMeanQueue_5() => Processes.ForEach(p => Console.WriteLine($"\t{p.Name}: {p.ProcessStatistic.MeanQueueAllTime / Time.All}"));
 }

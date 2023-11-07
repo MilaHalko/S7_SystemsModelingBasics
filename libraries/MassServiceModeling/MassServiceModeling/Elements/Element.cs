@@ -12,12 +12,13 @@ public abstract class Element
     // Non-static attributes
     public bool IsWorking { get; protected set; }
     public Item? Item { get; protected set; }
+    public double NextT = double.MaxValue;
+    public double Delay;
 
     // Static attributes
-    public Time Time = new();
     public NextElementsContainer? NextElementsContainer;
     public Model? Model { get; set; }
-    public ElementStatisticHelper StatisticHelper;
+    public ElementStatisticHelper BaseStatistic = new();
     public IPrinter Print { get; protected init; }
     public Randomizer Randomizer { get; }
 
@@ -29,7 +30,6 @@ public abstract class Element
     protected Element(Randomizer randomizer, string name)
     {
         Name = name == "" ? $"{GetElementDefaultName()}_{Id}" : name;
-        StatisticHelper = new ElementStatisticHelper(this);
         Print = new ElementPrinter(this);
         Randomizer = randomizer;
     }
@@ -37,34 +37,31 @@ public abstract class Element
     public virtual void InAct(Item item)
     {
         IsWorking = true;
-        DoInActsStatistics();
+        DoInActStatistics();
         SetItem(item);
     }
     
     public virtual void OutAct()
     {
         IsWorking = false;
-        DoOutActsStatistics();
+        DoOutActStatistics();
         NextElementsContainer?.InAct(Item ?? throw new InvalidOperationException());
         Item = null;
         UpdateNextT();
     }
     
-    public virtual void DoStatistics(double delta) => StatisticHelper.WorkTime += IsWorking ? delta : 0;
+    public virtual void DoStatistics(double delta) => BaseStatistic.WorkTime += IsWorking ? delta : 0;
 
-    protected virtual double GetDelay() => Time.Delay = Randomizer.GenerateDelay();
+    protected virtual double GetDelay() => Delay = Randomizer.GenerateDelay();
 
-    private void DoInActsStatistics() => StatisticHelper.InAct();
+    private void DoInActStatistics() => BaseStatistic.InAct();
 
-    private void DoOutActsStatistics()
+    private void DoOutActStatistics()
     {
-        StatisticHelper.OutActQuantity++;
-        
-        if (Item is null) throw new InvalidOperationException();
+        if (Item is null) {throw new InvalidOperationException();}
         IPrinter.CurrentItem = Item;
         Model!.AddItemTimeInSystem(Time.Curr - Item.StartTime);
-
-        StatisticHelper.OutAct();
+        BaseStatistic.OutAct();
     }
 
     protected abstract void UpdateNextT();

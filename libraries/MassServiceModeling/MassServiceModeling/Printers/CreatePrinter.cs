@@ -5,22 +5,22 @@ namespace MassServiceModeling.Printers;
 
 public class CreatePrinter : IPrinter
 {
-    private Create c;
-    private CreateStatisticHelper s => c.StatisticHelper;
+    private Create _c;
+    private ElementStatisticHelper _bs => _c.BaseStatistic;
 
-    public CreatePrinter(Create create) => c = create;
+    public CreatePrinter(Create create) => _c = create;
 
     public void Info()
     {
-        Console.Write($"  {c.Name} created={s.OutActQuantity}  " +
-                      $"delay={IPrinter.Format(c.Time.Delay)}  " +
-                      $"tnext={IPrinter.Format(c.Time.Next)  }");
+        Console.Write($"  {_c.Name} created={_bs.OutActQuantity}  " +
+                      $"delay={IPrinter.Format(_c.Delay)}  " +
+                      $"tnext={IPrinter.Format(_c.NextT)  }");
         Console.WriteLine();
     }
 
     public void Statistics()
     {
-        Console.WriteLine($"{c.Name}:");
-        Console.WriteLine($"\tQuantity = {s.OutActQuantity}");
+        Console.WriteLine($"{_c.Name}:");
+        Console.WriteLine($"\tQuantity = {_bs.OutActQuantity}");
     }
 }

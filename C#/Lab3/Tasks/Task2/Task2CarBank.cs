@@ -27,7 +27,7 @@ public class Task2CarBank
 
         // Initial states condition
         const double startTime = 0.1;
-        _cars.Time.Next = startTime;
+        _cars.NextT = startTime;
         for (var i = 0; i < 3; i++)
         {
             _cashier1.InAct(new Item(startTime));

@@ -2,16 +2,16 @@
 using MassServiceModeling.Items;
 using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.Elements;
 
 public class Create : Element
 {
-    public new CreateStatisticHelper StatisticHelper { get; }
-    
+    public CreateStatisticHelper CreateStatistic = new();
     public Create(Randomizer randomizer, string name = "") : base(randomizer, name)
     {
-        StatisticHelper = new CreateStatisticHelper(this);
+        NextT = Time.Start;
         Print = new CreatePrinter(this);
     }
 
@@ -29,5 +29,5 @@ public class Create : Element
 
     protected override string GetElementDefaultName() => "CREATE";
 
-    protected override void UpdateNextT() => Time.Next = Time.Curr + GetDelay();
+    protected override void UpdateNextT() => NextT = Time.Curr + GetDelay();
 }

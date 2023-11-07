@@ -3,24 +3,23 @@ using MassServiceModeling.Items;
 using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
 using MassServiceModeling.SubProcesses;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.Elements;
 
 public class Process : Element
 {
     public event Action? OnQueueChanged;
-    public new ProcessStatisticHelper StatisticHelper;
     public ItemsQueue Queue;
-    public SubProcessesContainer SubProcesses;
+    public SubProcessesContainer SubProcesses = new();
+    public ProcessStatisticHelper ProcessStatistic = new();
 
     public Process(Randomizer randomizer, int subProcessCount = 1, string name = "", int maxQueue = int.MaxValue, String subProcessName = "") 
         : base(randomizer, name)
     {
-        SubProcesses = new SubProcessesContainer(this);
-        for (int i = 0; i < subProcessCount; i++) SubProcesses.Add(new SubProcess(Time, i, subProcessName));
+        for (var i = 0; i < subProcessCount; i++) SubProcesses.Add(new SubProcess(i, subProcessName));
         Queue = new ItemsQueue(maxQueue);
-        Time.Next = double.MaxValue;
-        StatisticHelper = new ProcessStatisticHelper(this);
+        NextT = double.MaxValue;
         Print = new ProcessPrinter(this);
     }
 
@@ -53,7 +52,6 @@ public class Process : Element
                 subProcess.InAct(Time.Curr + GetDelay(), Item);
             }
         }
-
         UpdateNextT();
     }
 
@@ -61,16 +59,14 @@ public class Process : Element
     {
         base.DoStatistics(delta);
         foreach (var subProcess in SubProcesses.All) subProcess.DoStatistics(delta);
-        StatisticHelper.MeanQueueAllTime += Queue.Length * delta;
+        ProcessStatistic.MeanQueueAllTime += Queue.Length * delta;
     }
 
     public static void TryChangeQueueForLastItem(Process from, Process to)
     {
-        if (ItemsQueue.TrySwapLast(from.Queue, to.Queue))
-        {
-            from.OnQueueChanged?.Invoke();
-            to.OnQueueChanged?.Invoke();
-        }
+        if (!ItemsQueue.TrySwapLast(from.Queue, to.Queue)) return;
+        from.OnQueueChanged?.Invoke();
+        to.OnQueueChanged?.Invoke();
     }
 
     protected override void SetItem(Item item)
@@ -83,11 +79,11 @@ public class Process : Element
         else
         {
             if (Queue.TryAdd(item)) OnQueueChanged?.Invoke();
-            else StatisticHelper.Failure++;
+            else ProcessStatistic.Failure++;
         }
     }
     
-    protected override void UpdateNextT() => Time.Next = SubProcesses.All.Min(s => s.Time.Next);
+    protected override void UpdateNextT() => NextT = SubProcesses.All.Min(s => s.NextT);
     protected override string GetElementDefaultName() => "PROCESS";
     protected virtual void NextElementsContainerSetup() {}
 }

@@ -2,6 +2,7 @@
 using Lab3.Tasks.Task3.Clients;
 using MassServiceModeling.Elements;
 using MassServiceModeling.Items;
+using MassServiceModeling.TimeClasses;
 
 namespace Lab3.Tasks.Task3.Elements;
 

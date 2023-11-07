@@ -8,22 +8,21 @@ namespace MassServiceModeling.SubProcesses;
 public class SubProcess
 {
     // Dynamic attributes
+    public double NextT { get; private set; } = double.MaxValue;
     public Item? Item { private set; get; }
+    public double Delay { get; private set; }
     public bool IsWorking { get; private set; }
 
     // Static attributes
     public string Name { get; }
-    public Time Time = new();
-    public Time ProcessTime { get; }
     public SubProcessStatisticHelper StatisticHelper;
     public SubProcessPrinter Printer { get; private init; }
     
-    public SubProcess(Time processTime, int subProcessId, string name)
+    public SubProcess(int subProcessId, string name)
     {
-        ProcessTime = processTime;
         Name = name == "" ? "SubProcess" : name;
         Name = $"{Name}_{subProcessId}";
-        StatisticHelper = new SubProcessStatisticHelper(this);
+        StatisticHelper = new SubProcessStatisticHelper();
         Printer = new SubProcessPrinter(this);
     }
 
@@ -31,15 +30,15 @@ public class SubProcess
     {
         IsWorking = true;
         StatisticHelper.Quantity++;
-        Time.Next = nextT;
-        Time.Delay = nextT - ProcessTime.Curr;
+        NextT = nextT;
+        Delay = nextT - Time.Curr;
         Item = item;
     }
 
     public Item OutAct()
     {
         IsWorking = false;
-        Time.Next = double.MaxValue;
+        NextT = double.MaxValue;
         return Item!;
     }
 

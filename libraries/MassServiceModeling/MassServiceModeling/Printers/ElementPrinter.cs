@@ -5,21 +5,21 @@ namespace MassServiceModeling.Printers;
 
 public class ElementPrinter : IPrinter
 {
-    private Element e;
-    private ElementStatisticHelper s => e.StatisticHelper;
+    private Element _e;
+    private ElementStatisticHelper _bs => _e.BaseStatistic;
 
-    public ElementPrinter(Element element) => e = element;
+    public ElementPrinter(Element element) => _e = element;
 
     public void Info()
     {
-        Console.WriteLine($"{e.Name} state={IPrinter.PrintState(e.IsWorking)} quantity={s.InActQuantity} tnext={IPrinter.Format(e.Time.Next)}\n");
+        Console.WriteLine($"{_e.Name} state={IPrinter.PrintState(_e.IsWorking)} quantity={_bs.InActQuantity} tnext={IPrinter.Format(_e.NextT)}\n");
     }
 
     public void Statistics()
     {
-        Console.Out.WriteLine($"{e.Name}:");
-        Console.WriteLine($"\tQuantity = {s.InActQuantity}");
-        Console.WriteLine($"\tQuantity processed = {s.OutActQuantity}");
-        Console.WriteLine($"\tWorkTime = {s.WorkTime}");
+        Console.Out.WriteLine($"{_e.Name}:");
+        Console.WriteLine($"\tQuantity = {_bs.InActQuantity}");
+        Console.WriteLine($"\tQuantity processed = {_bs.OutActQuantity}");
+        Console.WriteLine($"\tWorkTime = {_bs.WorkTime}");
     }
 }
