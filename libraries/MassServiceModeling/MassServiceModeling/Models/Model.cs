@@ -3,7 +3,7 @@ using MassServiceModeling.Printers;
 using MassServiceModeling.Statistics;
 using MassServiceModeling.TimeClasses;
 
-namespace MassServiceModeling;
+namespace MassServiceModeling.Models;
 
 public class Model
 {
@@ -14,8 +14,8 @@ public class Model
     
     public event Action? OnNextElementStarted;
     public ModelStatisticHelper StatisticHelper;
-    protected double NextT;
     protected bool InitialStateAccessed { get; }
+    protected double NextT;
     private int _event;
 
     public Model(List<Element> elements, bool initialStateIsNeeded = false)
@@ -26,9 +26,10 @@ public class Model
         Elements.ForEach(e => e.Model = this);
     }
 
-    public virtual void Simulate(double time, double startTime = 0, bool printSteps = false)
+    public virtual void Simulate(double time, double startTime = 0, bool printSteps = false, bool printResult = true)
     {
         Time.SetStart(startTime);
+        
         while (Time.Curr < time)
         {
             DefineNextEvent();
@@ -42,8 +43,7 @@ public class Model
                 IPrinter.Info(Elements, Elements[_event]);
             }
         }
-
-        IPrinter.Result(Elements);
+        if (printResult) IPrinter.Result(Elements);
     }
 
     protected virtual void DoStatistics()

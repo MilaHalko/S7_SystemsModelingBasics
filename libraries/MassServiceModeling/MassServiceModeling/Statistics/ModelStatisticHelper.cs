@@ -1,4 +1,5 @@
-﻿using MassServiceModeling.TimeClasses;
+﻿using MassServiceModeling.Models;
+using MassServiceModeling.TimeClasses;
 
 namespace MassServiceModeling.Statistics;
 
