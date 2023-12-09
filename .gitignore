@@ -32,3 +32,5 @@ libraries/DistributionRandomizer/DistributionRandomizer/obj/
 *.pdb
 
 libraries/DistributionRandomizer/DistributionRandomizer/bin/Debug/net7.0/
+
+C#/Lab3/obj/
