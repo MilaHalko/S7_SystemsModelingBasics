@@ -1,5 +1,5 @@
-﻿using MassServiceModeling;
-using MassServiceModeling.Elements;
+﻿using MassServiceModeling.Elements;
+using MassServiceModeling.Model;
 
 namespace Lab3.Tasks.Task3;
 
